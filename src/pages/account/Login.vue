@@ -31,7 +31,7 @@
 <template>
     <div class="wrapper">
         <h1 class="font-green-color">德美店务管理后台</h1>
-        <p>让每一个家庭拥有健康，快乐，美丽！</p>
+        <p>让每一个家庭拥有健康、快乐、美丽！</p>
         <div class="login">
             <div class="login-box">
                 <i-form ref="formInline" :model="formInline" :rules="ruleInline" style="padding-top:10px">
@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
     data() {
             return {
@@ -83,10 +85,15 @@ export default {
             handleSubmit(name) {
                     this.$refs[name].validate((valid) => {
                         if (valid) {
-                            this.$Message.success('提交成功!');
-                            this.$router.push('/home');
+                            this.$store.dispatch('loginAction', {
+                                user: this.formInline.user,
+                                password: this.formInline.password
+                            }).then(() => {
+                              // 登录成功
+                              this.$router.push('/')
+                            })
                         } else {
-                            this.$Message.error('表单验证错误!');
+                            this.$Message.error('表单验证错误!')
                         }
                     })
                 }

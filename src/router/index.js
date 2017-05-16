@@ -1,23 +1,98 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import {LoadingBar} from 'iview'
+
+const Login = resolve => require(['../pages/account/Login'], resolve)
+const Layout = resolve => require(['../pages/Layout'], resolve)
+const dashboard = resolve => require(['../pages/dashboard'], resolve)
 
 Vue.use(Router)
 
 export default new Router({
-routes: [
-    {
-    	path: '/',
-    	name: 'Login',
-    	component: resolve => require(['../pages/account/Login.vue'], resolve)
-    },
-    {
-    	path: '/login',
-    	component: resolve => require(['../pages/account/Login.vue'], resolve)
-    },
-    {
-    	path: '/home',
-    	component: resolve => require(['../pages/home/Index.vue'], resolve)
-    }
-  ]
+    routes: [
+        {
+            path: '/login',
+            component: Login,
+            hidden: true
+        },
+        {
+            path: '/',
+            component: Layout,
+            redirect: '/dashboard',
+            name: '首页',
+            hidden: true,
+            children: [
+                {
+                    path: 'dashboard', 
+                    component: dashboard
+                }
+            ]
+        },
+        {
+            path: "/personnel",
+            component: Layout,
+            name: '人事行政',
+            icon: 'person-stalker',
+            hidden: false,
+            children: [
+                {
+                    name: "门店管理",
+                    path: "storeManage",
+                    component: dashboard
+                },
+                {
+                    name: "职工信息",
+                    path: "employee",
+                    component: dashboard
+                }
+            ]
+        },
+        {
+            path: "/analysis",
+            component: Layout,
+            name: '数据统计',
+            icon: 'ios-pie',
+            hidden: false,
+            children: [
+                {
+                    name: "门店数据",
+                    path: "storeData",
+                    component: dashboard
+                },
+                {
+                    name: "品项数据",
+                    path: "employee",
+                    component: dashboard
+                }
+            ]
+        },
+        {
+            path: "/operation",
+            component: Layout,
+            name: '运营管理',
+            icon: 'ios-filing',
+            hidden: false,
+            children: [
+                {
+                    name: "项目信息",
+                    path: "items",
+                    component: dashboard
+                },
+                {
+                    name: "商品信息",
+                    path: "goods",
+                    component: dashboard
+                }
+            ]
+        }
+    ]
 })
+
+// router.beforeEach((to, from, next) => {
+//     LoadingBar.start();
+//     next();
+// });
+
+// router.afterEach((to, from, next) => {
+//     LoadingBar.finish();
+// });

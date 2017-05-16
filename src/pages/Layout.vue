@@ -48,14 +48,17 @@
         padding: 10px 0 20px;
         color: #9ea7b4;
     }
-    
+
+    .layout-content a{
+        color: #657180;
+    }
 </style>
 <template>
     <div class="layout">
         <div class="layout-header">
             <div class="layout-logo">德美店务后台</div>
             <div class='layout-account'>
-                 技术支持 * 唐高林 | 
+                 技术支持 * {{userInfo.username}} | 
                  <a href="javascript:;">退出</a>
             </div>
         </div>
@@ -64,37 +67,23 @@
             <div class="layout-content">
                 <Row>
                     <i-col span="4">
-                        <Menu active-name="1-2" width="auto" :open-names="['1']">
-                            <Submenu name="1">
+                        <Menu active-name="" width="auto" :open-names="[2]" theme="light">
+                            <Submenu v-for="(item,index) in userRulesNode" :name="index"  :key="item.path" v-if="!item.hidden">
                                 <template slot="title">
-                                    <Icon type="ios-navigate"></Icon>
-                                    导航一
+                                    <Icon :type="item.icon" :size=16></Icon>
+                                    {{item.name}}
                                 </template>
-                                <Menu-item name="1-1">选项 1</Menu-item>
-                                <Menu-item name="1-2">选项 2</Menu-item>
-                                <Menu-item name="1-3">选项 3</Menu-item>
-                            </Submenu>
-                            <Submenu name="2">
-                                <template slot="title">
-                                    <Icon type="ios-keypad"></Icon>
-                                    导航二
-                                </template>
-                                <Menu-item name="2-1">选项 1</Menu-item>
-                                <Menu-item name="2-2">选项 2</Menu-item>
-                            </Submenu>
-                            <Submenu name="3">
-                                <template slot="title">
-                                    <Icon type="ios-analytics"></Icon>
-                                    导航三
-                                </template>
-                                <Menu-item name="3-1">选项 1</Menu-item>
-                                <Menu-item name="3-2">选项 2</Menu-item>
+                                <router-link v-for="(child,childIndex) in item.children" :key="child.path" :to="item.path + '/' + child.path" >
+                                    <Menu-item :name="index+'-'+ childIndex" :index="item.path+'/'+child.path">{{child.name}}</Menu-item>
+                                </router-link>
                             </Submenu>
                         </Menu>
                     </i-col>
                     <i-col span="20">
                         <div class="layout-content-main">
-                            
+                            <transition name="fade" mode="out-in">
+                                <router-view></router-view>
+                            </transition>
                         </div>
                     </i-col>
                 </Row>
@@ -106,8 +95,23 @@
         </div>
     </div>
 </template>
+
 <script>
+    import { mapGetters } from 'vuex'
     export default {
-        
+        computed: {
+            ...mapGetters([
+              'userInfo',
+              'userRulesNode'
+            ])
+        },
+        created() {
+            this.fetchData();
+        },
+        methods: {
+            fetchData() {
+                console.log(this.userRulesNode);
+            }
+        }
     }
 </script>

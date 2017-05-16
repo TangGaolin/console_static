@@ -11,11 +11,11 @@ export default {
 </script>
 
 <style>
-  #app {
-    position: absolute;
-    top: -1px;
-    left: -1px;
-    bottom: 0px;
-    width: 100%;
+    #app {
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        bottom: 0px;
+        width: 100%;
   }
 </style>

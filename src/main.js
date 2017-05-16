@@ -1,17 +1,20 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
+import axios from 'axios'
 import iView from 'iview'
-// import 'iview/dist/styles/iview.css'
 import '../mytheme/index.less'
+import './mock/index.js'  // 使用api请求时请将此行注释，不然将被mock拦截!!
 
 Vue.use(iView)
+
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })
