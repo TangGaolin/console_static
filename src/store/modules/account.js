@@ -8,9 +8,12 @@ const state = {
 }
 const mutations = {
     [types.SET_ACCOUNT] (state, account) {
-        state.userInfo = account.userInfo
-        state.roles = account.roles
-        Cookies.set('userinfo', account.userInfo)
+        state.userInfo = account
+        Cookies.set('userinfo', account)
+    },
+    [types.UNSET_ACCOUNT] (state) {
+    	state.userInfo = null
+        Cookies.remove('userinfo')
     }
 }
 export default {

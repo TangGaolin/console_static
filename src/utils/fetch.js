@@ -1,44 +1,30 @@
 import axios from 'axios'
 import store from '../store'
 import router from '../router'
-
-export default function _fetch(options) {
-  return new Promise((resolve, reject) => {
-    const instance = axios.create({
-      baseURL: process.env.BASE_API,
-      // timeout: 2000,
-      headers: { 'X-Ivanka-Token': store.getters.token }
-    })
-    instance(options)
-      .then(response => {
-        const res = response.data
-        if (res.code !== 20000) {
-          console.log(options)
-          reject(res)
-        }
-        resolve(res)
-      })
-      .catch(error => {
-        console.log(error) // for debug
-        reject(error)
-      });
-  });
-}
+import {LoadingBar} from 'iview'
+axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 export function fetch(options) {
   return new Promise((resolve, reject) => {
     const instance = axios.create({
-      timeout: 2000 // 超时
+      timeout: 10000 // 超时
     })
+    LoadingBar.start()
     instance(options)
       .then(response => {
         const res = response.data
-        console.log(response)
+        LoadingBar.finish()
         resolve(res)
       })
       .catch(error => {
         console.log(error) // for debug
+        LoadingBar.finish()
         reject(error)
       })
+
   });
 }
+
+
+
+

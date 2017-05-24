@@ -57,9 +57,9 @@
     <div class="layout">
         <div class="layout-header">
             <div class="layout-logo">德美店务后台</div>
-            <div class='layout-account'>
-                 技术支持 * {{userInfo.username}} | 
-                 <a href="javascript:;">退出</a>
+            <div class='layout-account'  v-if="typeof(userInfo) !== 'undefined'">
+                 {{userInfo.job_title }} * {{userInfo.emp_name}} | 
+                 <a href="javascript:void(0);" v-on:click="logout">退出</a>
             </div>
         </div>
 
@@ -111,6 +111,13 @@
         methods: {
             fetchData() {
                 console.log(this.userRulesNode);
+            },
+            logout() {
+                console.log('xxxx')
+                this.$store.dispatch('logoutAction',{}).then(() => {
+                    // 登录成功
+                    this.$router.push('/login')
+                })
             }
         }
     }
