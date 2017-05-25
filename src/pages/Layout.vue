@@ -48,10 +48,10 @@
         padding: 10px 0 20px;
         color: #9ea7b4;
     }
-
     .layout-content a{
         color: #657180;
     }
+
 </style>
 <template>
     <div class="layout">
@@ -67,14 +67,14 @@
             <div class="layout-content">
                 <Row>
                     <i-col span="4">
-                        <Menu active-name="" width="auto" :open-names="[2]" theme="light">
-                            <Submenu v-for="(item,index) in userRulesNode" :name="index"  :key="item.path" v-if="!item.hidden">
+                        <Menu :active-name="$route.path" width="auto" :open-names="[currentMenu]" theme="light">
+                            <Submenu v-for="(item,index) in userRulesNode" :name="item.path"  :key="item.path" v-if="!item.hidden">
                                 <template slot="title">
                                     <Icon :type="item.icon" :size=16></Icon>
                                     {{item.name}}
                                 </template>
                                 <router-link v-for="(child,childIndex) in item.children" :key="child.path" :to="item.path + '/' + child.path" >
-                                    <Menu-item :name="index+'-'+ childIndex" :index="item.path+'/'+child.path">{{child.name}}</Menu-item>
+                                    <Menu-item :name="item.path+'/'+child.path" :index="item.path+'/'+child.path">{{child.name}} </Menu-item>
                                 </router-link>
                             </Submenu>
                         </Menu>
@@ -99,6 +99,11 @@
 <script>
     import { mapGetters } from 'vuex'
     export default {
+        data() {
+            return {
+                currentMenu: ""
+            }
+        },
         computed: {
             ...mapGetters([
               'userInfo',
@@ -106,7 +111,8 @@
             ])
         },
         created() {
-            this.fetchData();
+            this.fetchData()
+            this.currentMenu = "/" + this.$route.path.split("/")[1]
         },
         methods: {
             fetchData() {
