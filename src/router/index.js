@@ -6,7 +6,9 @@ import {LoadingBar} from 'iview'
 const Login = resolve => require(['../pages/account/Login'], resolve)
 const Layout = resolve => require(['../pages/Layout'], resolve)
 const dashboard = resolve => require(['../pages/dashboard'], resolve)
-const storeInfo = resolve => require(['../pages/personnel/store'], resolve)
+const storeList = resolve => require(['../pages/personnel/store'], resolve)
+const storeInfo = resolve => require(['../pages/personnel/storeDetails'], resolve)
+const employee = resolve => require(['../pages/personnel/employee'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -39,12 +41,18 @@ const router =  new Router({
                 {
                     name: "门店管理",
                     path: "storeManage",
-                    component: storeInfo
+                    component: storeList
+                },
+                {
+                    name: "门店详情",
+                    path: "storeManage/shoreInfo",
+                    component: storeInfo,
+                    hidden: true
                 },
                 {
                     name: "职工信息",
                     path: "employee",
-                    component: dashboard
+                    component: employee
                 }
             ]
         },

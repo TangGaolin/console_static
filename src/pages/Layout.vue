@@ -67,14 +67,14 @@
             <div class="layout-content">
                 <Row>
                     <i-col span="4">
-                        <Menu :active-name="$route.path" width="auto" :open-names="[currentMenu]" theme="light">
+                        <Menu :active-name="$route.path | activeName" width="auto" :open-names="[currentMenu]" theme="light">
                             <Submenu v-for="(item,index) in userRulesNode" :name="item.path"  :key="item.path" v-if="!item.hidden">
                                 <template slot="title">
                                     <Icon :type="item.icon" :size=16></Icon>
                                     {{item.name}}
                                 </template>
-                                <router-link v-for="(child,childIndex) in item.children" :key="child.path" :to="item.path + '/' + child.path" >
-                                    <Menu-item :name="item.path+'/'+child.path" :index="item.path+'/'+child.path">{{child.name}} </Menu-item>
+                                <router-link v-for="(child,childIndex) in item.children" :key="child.path" :to="item.path + '/' + child.path">
+                                    <Menu-item :name="item.path+'/'+child.path" :index="item.path+'/'+child.path" v-if="!child.hidden">{{child.name}} </Menu-item>
                                 </router-link>
                             </Submenu>
                         </Menu>
@@ -104,6 +104,12 @@
                 currentMenu: ""
             }
         },
+        filters: {
+            activeName: function(name){
+                const routes = name.split("/")
+                return "/" + routes[1] + "/" + routes[2]
+            }
+        },
         computed: {
             ...mapGetters([
               'userInfo',
@@ -121,7 +127,7 @@
             logout() {
                 console.log('xxxx')
                 this.$store.dispatch('logoutAction',{}).then(() => {
-                    // 登录成功
+                    // 退出成功
                     this.$router.push('/login')
                 })
             }

@@ -9,4 +9,23 @@ export function getStoreList(params) {
 	});
 }
 
+export function updateStoreInfo(params) {
+	const data = params
+	return fetch({
+		url:  process.env.API_ROOT + '/store/updateStoreInfo',
+		method: 'post',
+		data
+	});
+}
+
+export function addStore(params) {
+	const data = params
+	return fetch({
+		url:  process.env.API_ROOT + '/store/addStore',
+		method: 'post',
+		data
+	});
+}
+
+
 
