@@ -58,8 +58,8 @@
                         </a>
                         <!-- <a :href="'#/personnel/storeManage/shoreInfo?shop_id=' + item.shop_id"> -->
                             <ul>
+                                <p>地区: {{item.city.join('.')}}</p>
                                 <p>电话: {{item.shop_tel}}</p>
-                                <p>地区: {{item.city.join('/')}}</p>
                                 <p>详细地址: {{item.address}}</p>
                             </ul>
                         <!-- </a> -->
