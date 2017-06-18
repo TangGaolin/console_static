@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from '../store'
 import {LoadingBar} from 'iview'
 
+
 const Login = resolve => require(['../pages/account/Login'], resolve)
 const Layout = resolve => require(['../pages/Layout'], resolve)
 const dashboard = resolve => require(['../pages/dashboard'], resolve)
@@ -100,15 +101,19 @@ const router =  new Router({
 
 router.beforeEach((to, from, next) => {
     var account = store.state.account
+
     if(to.path === '/login') {
         return next()
     }
+
     if (typeof(account.userInfo) === "undefined") {
         return next(`/login?redirect=${encodeURIComponent(to.path)}`)
     }else {
         return next()
     }
+
 })
+
 router.afterEach(transition => {
 
 });

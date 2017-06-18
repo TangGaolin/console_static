@@ -1,5 +1,15 @@
 import { fetch } from '../utils/fetch';
 
+
+export function getConfig(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/getConfig',
+        method: 'post',
+        data
+    });
+}
+
 export function login(params) {
 	const data = params
 	return fetch({

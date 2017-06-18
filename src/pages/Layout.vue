@@ -57,8 +57,8 @@
     <div class="layout">
         <div class="layout-header">
             <div class="layout-logo">德美店务后台</div>
-            <div class='layout-account'  v-if="typeof(userInfo) !== 'undefined'">
-                 {{userInfo.job_title }} * {{userInfo.emp_name}} | 
+            <div class='layout-account'  v-if="userInfo !== null">
+                 {{userInfo.job }} * {{userInfo.emp_name}} |
                  <a href="javascript:void(0);" v-on:click="logout">退出</a>
             </div>
         </div>

@@ -118,7 +118,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getStoreList,updateStoreInfo,addStore } from '../../api/shop'
+import { getStoreList, updateStoreInfo, addStore } from '../../api/shop'
 import { division } from '../../utils/division'
 export default {
     data() {
@@ -151,7 +151,7 @@ export default {
         getStoreList() {
             getStoreList().then((response) => {
                 if(0 != response.statusCode) {
-                    Message.error(response.msg)
+                    this.$Message.error(response.msg)
                 }else{
                     this.storeList = response.data
                 }
@@ -171,7 +171,7 @@ export default {
         updateStoreInfo() {
             updateStoreInfo(this.currentStore).then((response) => {
                 if(0 != response.statusCode) {
-                    Message.error(response.msg)
+                    this.$Message.error(response.msg)
                 }else{
                     this.editStoreModel = false
                 }
@@ -184,7 +184,7 @@ export default {
         addStore() {
             addStore(this.newStore).then((response) => {
                 if(0 != response.statusCode) {
-                    Message.error(response.msg)
+                    this.$Message.error(response.msg)
                 }else{
                     this.getStoreList()
                     this.newStore.shop_name = ""
@@ -196,7 +196,8 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error)
-                })
+                }
+            )
         }
     }
 }

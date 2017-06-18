@@ -5,8 +5,27 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'app'
+    name: 'app',
+    computed: {
+        ...mapGetters([
+            'userInfo',
+            'globalConfig'
+        ])
+    },
+    created() {
+        this.getConfig()
+    },
+    methods: {
+        getConfig(){
+            if(this.globalConfig === "") {
+                this.$store.dispatch('getConfigAction')
+            }
+        }
+    }
 }
 </script>
 
@@ -27,6 +46,9 @@ export default {
         line-height: 70px;
         font-weight: 400;
         font-style: normal;
+    }
+    .red {
+      color:#f60;
     }
 
 </style>
