@@ -2,7 +2,7 @@
     <span>
         <Button type="primary" icon="android-add" @click = "newEmployee = true">新建</Button>
         <Modal v-model="newEmployee" width="360">
-            <p slot="header" style="text-align:center" class = "red" >
+            <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="android-add"></Icon>
                 <span>新增员工</span>
             </p>

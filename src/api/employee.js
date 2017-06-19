@@ -18,6 +18,13 @@ export function addEmployee(params) {
     });
 }
 
-
+export function updateEmployee(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/employee/updateEmployee',
+        method: 'post',
+        data
+    });
+}
 
 
