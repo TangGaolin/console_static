@@ -36,6 +36,7 @@ export default {
         left: -1px;
         bottom: 0px;
         width: 100%;
+        font-size: 12px;
   }
     .content-header{
         border-bottom: 1px solid #ccc;

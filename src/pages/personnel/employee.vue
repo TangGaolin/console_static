@@ -2,7 +2,6 @@
     .content-main {
         padding: 40px 40px;
     }
-
     .ivu-form-item {
         margin-bottom: 8px;
     }
@@ -21,13 +20,16 @@
                                  :globalConfig = globalConfig
                                  :storeList = storeList
                                  v-on:addEmployee = "addEmployee"></AddEmployee>
-                    <Button type="primary" icon="share">导入</Button>
+                    <ImportEmployee :storeList = storeList></ImportEmployee>
                 </span>
             </div>
             <br/>
             <Table stripe :columns="empColumns" :data="empData"></Table>
+            <br/>
+            <div style="float: right;">
+                <Page :total= empTotal :current= searchData.cur_page @on-change="changePage"></Page>
+            </div>
         </div>
-
 
         <Modal v-model="updateEmployeeModel" width="360">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
@@ -156,7 +158,13 @@ export default {
                     }
                 }
             ],
-            empData:[]
+            empData:[],
+            empTotal:0,
+            searchData: {
+                emp_name_phone: "",
+                cur_page: 1,
+                limit: 10
+            }
         }
     },
     computed: {
@@ -187,15 +195,20 @@ export default {
             })
         },
         getEmployeeList() {
-            getEmployeeList().then((response) => {
+            getEmployeeList(this.searchData).then((response) => {
                 if(0 !== response.statusCode) {
-                    Message.error(response.msg)
+                    this.$Message.error(response.msg)
                 }else{
                     this.empData = response.data.data
+                    this.empTotal = response.data.totalSize
                 }
             }).catch((error) => {
                 console.log(error)
             })
+        },
+        changePage(page) {
+            this.searchData.cur_page = page
+            this.empData = this.getEmployeeList()
         },
         addEmployee() {
             addEmployee(this.employeeInfo).then((response) => {
@@ -210,6 +223,7 @@ export default {
                     this.employeeInfo.shop_id = ""
                     this.employeeInfo.job = ""
                     this.employeeInfo.remark = ""
+                    this.$Message.success("添加成功！")
                 }
             }).catch((error) => {
                 console.log(error)
@@ -238,12 +252,11 @@ export default {
                     this.currentEmployee.shop_id = ""
                     this.currentEmployee.job = ""
                     this.updateEmployeeModel = false
+                    this.$Message.success("修改成功")
                 }
             }).catch((error) => {
                 console.log(error)
             })
-
-
         }
     }
 }

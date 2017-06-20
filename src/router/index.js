@@ -35,7 +35,7 @@ const router =  new Router({
         {
             path: "/personnel",
             component: Layout,
-            name: '人事行政',
+            name: '门店 & 职工',
             icon: 'person-stalker',
             hidden: false,
             children: [
@@ -58,6 +58,25 @@ const router =  new Router({
             ]
         },
         {
+            path: "/operation",
+            component: Layout,
+            name: '项目 & 商品',
+            icon: 'ios-filing',
+            hidden: false,
+            children: [
+                {
+                    name: "项目管理",
+                    path: "items",
+                    component: dashboard
+                },
+                {
+                    name: "商品管理",
+                    path: "goods",
+                    component: dashboard
+                }
+            ]
+        },
+        {
             path: "/analysis",
             component: Layout,
             name: '数据统计',
@@ -72,25 +91,6 @@ const router =  new Router({
                 {
                     name: "品项数据",
                     path: "employee",
-                    component: dashboard
-                }
-            ]
-        },
-        {
-            path: "/operation",
-            component: Layout,
-            name: '运营管理',
-            icon: 'ios-filing',
-            hidden: false,
-            children: [
-                {
-                    name: "项目信息",
-                    path: "items",
-                    component: dashboard
-                },
-                {
-                    name: "商品信息",
-                    path: "goods",
                     component: dashboard
                 }
             ]
