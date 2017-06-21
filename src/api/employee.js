@@ -27,4 +27,13 @@ export function updateEmployee(params) {
     });
 }
 
+export function removeEmployee(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/employee/removeEmployee',
+        method: 'post',
+        data
+    });
+}
+
 

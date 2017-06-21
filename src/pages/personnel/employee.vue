@@ -13,8 +13,8 @@
         </div>
         <div class="content-main">
             <div class="sub_title">
-                <Input v-model="employee" placeholder="员工姓名/手机..." size = "large" style="width: 300px"></Input>
-                <Button type="primary" icon="ios-search" size = "large">搜索</Button>
+                <Input v-model="searchData.emp_name_phone" placeholder="员工姓名/手机..." size = "large" style="width: 300px"  @keyup.13="getEmployeeList"></Input>
+                <Button type="primary" icon="ios-search" size = "large" v-on:click="getEmployeeList">搜索</Button>
                 <span style="float:right">
                     <AddEmployee :employeeInfo = employeeInfo
                                  :globalConfig = globalConfig
@@ -72,6 +72,21 @@
             </p>
 
         </Modal>
+
+
+        <Modal v-model="removeEmployeeModel" width="360">
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="information-circled"></Icon>
+                <span>删除确认</span>
+            </p>
+            <div style="text-align:center">
+                <p>员工删除之后，在前台收银就不会被显示！</p>
+                <p>是否继续删除？</p>
+            </div>
+            <div slot="footer">
+                <Button type="error" size="large" long  @click="removeEmployee">删除</Button>
+            </div>
+        </Modal>
     </div>
 
 </template>
@@ -80,14 +95,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getStoreList } from '../../api/shop'
-import { getEmployeeList, addEmployee, updateEmployee } from '../../api/employee'
+import { getEmployeeList, addEmployee, updateEmployee,removeEmployee } from '../../api/employee'
 
 export default {
     data() {
         return {
             store: "all",
             storeList: [],
-            employee:"",
             employeeInfo: {
                 emp_name: "",
                 phone_no: "",
@@ -105,6 +119,7 @@ export default {
                 remark: ""
             },
             updateEmployeeModel: false,
+            removeEmployeeModel: false,
             empColumns: [
                 {
                     title: '姓名',
@@ -150,10 +165,12 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-
+                                        this.showRemoveEmployee(params.row)
                                     }
                                 }
                             }, '删除')
+
+
                         ]);
                     }
                 }
@@ -229,9 +246,7 @@ export default {
                 console.log(error)
             })
         },
-
         modifyEmployee(emp_info) {
-            console.log(emp_info)
             this.empData.forEach((item, index) => {
                 if(item.emp_id === emp_info.emp_id){
                     this.currentEmployee = item
@@ -257,7 +272,36 @@ export default {
             }).catch((error) => {
                 console.log(error)
             })
-        }
+        },
+
+        showRemoveEmployee(emp_info) {
+            this.empData.forEach((item, index) => {
+                if(item.emp_id === emp_info.emp_id){
+                    this.currentEmployee = item
+                }
+            })
+            this.removeEmployeeModel = true
+        },
+
+        removeEmployee() {
+            removeEmployee(this.currentEmployee).then((response) => {
+                if(0 != response.statusCode) {
+                    this.$Message.error(response.msg)
+                }else{
+                    this.getEmployeeList()
+                    this.currentEmployee.emp_name = ""
+                    this.currentEmployee.phone_no  = ""
+                    this.currentEmployee.shop_address = ""
+                    this.currentEmployee.sex = 1
+                    this.currentEmployee.shop_id = ""
+                    this.currentEmployee.job = ""
+                    this.removeEmployeeModel = false
+                    this.$Message.success("删除成功")
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
     }
 }
 </script>
