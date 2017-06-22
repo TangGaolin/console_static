@@ -46,6 +46,15 @@ export function modifyItem(params) {
     });
 }
 
+export function modifyItemType(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/item/modifyItemType',
+        method: 'post',
+        data
+    });
+}
+
 
 
 

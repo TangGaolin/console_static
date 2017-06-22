@@ -87,12 +87,25 @@
             </Row>
             <p slot="footer" style="text-align: center">
                 <i-button type="success" v-on:click="modifyItem" long size="large">
-                    确 认 添 加
+                    确 认 修 改
                 </i-button>
             </p>
-
         </Modal>
 
+        <Modal v-model="modifyItemTypeModel" width="360">
+            <p slot="header" style="color:#f60;text-align:center" class = "red" >
+                <Icon type="android-add"></Icon>
+                <span>编辑项目类型</span>
+            </p>
+            <h3 class="red">* 卡项名称:</h3>
+            <Input v-model="currentItemTypeData.item_type_name"></Input>
+
+            <p slot="footer" style="text-align: center">
+                <i-button type="success" v-on:click="modifyItemType" long size="large">
+                    确 认 修 改
+                </i-button>
+            </p>
+        </Modal>
 
     </div>
 
@@ -101,7 +114,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getItemList, getItemType,addItem,addItemType,modifyItem} from '../../api/item'
+import { getItemList, getItemType, addItem, addItemType, modifyItem, modifyItemType} from '../../api/item'
 
 export default {
     data() {
@@ -119,13 +132,15 @@ export default {
                 times: "",
                 emp_fee: ""
             },
-
             currentItemData: {
                 item_name: "",
                 item_type: "",
                 price: "",
                 times: "",
                 emp_fee: ""
+            },
+            currentItemTypeData: {
+                item_type_name: ""
             },
             searchData:{
                 item_name: "",
@@ -147,7 +162,7 @@ export default {
                     key: 'price'
                 },
                 {
-                    title: '建议次数',
+                    title: '推荐次数',
                     key: 'times'
                 },
                 {
@@ -215,7 +230,7 @@ export default {
             itemTotal: 0,
 
             modifyAddItemModel: false,
-            modifyAddItemTypeModel: false
+            modifyItemTypeModel: false
         }
     },
     computed: {
@@ -245,8 +260,6 @@ export default {
                     this.itemTypeData.forEach((item, index) => {
                         this.convertItemTypeObject[item.item_type_id] = item.item_type_name;
                     })
-                    console.log(this.convertItemTypeObject)
-
                 }
             }).catch((error) => {
                 console.log(error)
@@ -288,7 +301,6 @@ export default {
             })
         },
 
-
         showModifyItemModel(itemInfo) {
             this.itemList.forEach((item, index) => {
                 if(item.item_id === itemInfo.item_id){
@@ -299,11 +311,13 @@ export default {
         },
 
         modifyItem() {
-            modifyItem(this.itemType).then((response) => {
+            modifyItem(this.currentItemData).then((response) => {
                 if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
                     this.modifyAddItemModel = false
+                    this.getItemList()
+                    this.$Message.success("修改成功！")
                 }
             }).catch((error) => {
                 console.log(error)
@@ -316,18 +330,33 @@ export default {
                     this.$Message.error(response.msg)
                 }else{
                     this.getItemType()
+                    this.$Message.success("添加成功！")
                 }
             }).catch((error) => {
                 console.log(error)
             })
         },
 
-        showModifyItemTypeModel() {
-
+        showModifyItemTypeModel(itemTypeInfo) {
+            this.itemTypeData.forEach((item, index) => {
+                if(item.item_type_id === itemTypeInfo.item_type_id){
+                    this.currentItemTypeData = item
+                }
+            })
+            this.modifyItemTypeModel = true
         },
         modifyItemType() {
-
-
+            modifyItemType(this.currentItemTypeData).then((response) => {
+                if(0 !== response.statusCode) {
+                    this.$Message.error(response.msg)
+                }else{
+                    this.modifyItemTypeModel = false
+                    this.getItemType()
+                    this.$Message.success("修改成功！")
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
         }
     }
 }
