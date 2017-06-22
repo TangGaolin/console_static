@@ -4,7 +4,7 @@
         <Modal v-model="newAddItemModel" width="360">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="android-add"></Icon>
-                <span>新增类别</span>
+                <span>新增项目</span>
             </p>
             <h3 class="red">* 卡项名称:</h3>
             <Input v-model="itemData.item_name"></Input>
@@ -13,7 +13,7 @@
                 <Col span="11">
                     <h3 class="red">* 卡项类别:</h3>
                     <Select v-model="itemData.item_type">
-                        <Option v-for="item in itemTypeData" :value="item.item_type_id" :key="item.item_type_id" v-if="0 != item.item_type_id">{{ item.item_type_name }}</Option>
+                        <Option v-for="item in itemTypeData" :value="item.item_type_id" :key="item.item_type_id" >{{ item.item_type_name }}</Option>
                     </Select>
                 </Col>
                 <Col span="11" offset="1">

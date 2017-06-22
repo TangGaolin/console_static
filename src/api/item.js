@@ -28,5 +28,24 @@ export function addItem(params) {
     });
 }
 
+export function addItemType(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/item/addItemType',
+        method: 'post',
+        data
+    });
+}
+
+export function modifyItem(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/item/modifyItem',
+        method: 'post',
+        data
+    });
+}
+
+
 
 

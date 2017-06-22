@@ -17,7 +17,7 @@
                 <Tab-pane label="项目列表" name="name1">
                     <div class="sub_title">
                         <Select v-model="searchData.item_type" size = "large" style="width:100px">
-                            <Option v-for="item in itemTypeData" :value="item.item_type_id">
+                            <Option v-for="item in selectItemTypeData" :value="item.item_type_id" :key="item.item_type_id">
                                 {{ item.item_type_name }}
                             </Option>
                         </Select>
@@ -37,15 +37,62 @@
                         <Page :total= itemTotal :current= "1" @on-change="changePage"></Page>
                     </div>
                 </Tab-pane>
-                
+
                 <Tab-pane label="项目分类" name="name2">
+                    <AddItemType :itemType = itemType
+                                 v-on:addItemType = "addItemType"
+                    ></AddItemType>
+                    <br/><br/>
+                    <Row>
+                        <Col span="11">
+                            <Table border :columns="itemTypeColumns" :data="itemTypeData" style="width: 300px" ></Table>
+                        </Col>
+                        <Col span="11" offset="1">
 
-
-
+                        </Col>
+                    </Row>
                 </Tab-pane>
             </Tabs>
-
         </div>
+
+        <Modal v-model="modifyAddItemModel" width="360">
+            <p slot="header" style="color:#f60;text-align:center" class = "red" >
+                <Icon type="android-add"></Icon>
+                <span>编辑项目</span>
+            </p>
+            <h3 class="red">* 卡项名称:</h3>
+            <Input v-model="currentItemData.item_name"></Input>
+            <br/><br/>
+            <Row>
+                <Col span="11">
+                <h3 class="red">* 卡项类别:</h3>
+                <Select v-model="currentItemData.item_type">
+                    <Option v-for="item in itemTypeData" :value="item.item_type_id" :key="item.item_type_id" >{{ item.item_type_name }}</Option>
+                </Select>
+                </Col>
+                <Col span="11" offset="1">
+                <h3 class="red">* 建议次数:</h3>
+                <Input v-model="currentItemData.times"></Input>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="11">
+                <h3 class="red">* 单价:</h3>
+                <Input v-model="currentItemData.price"></Input>
+                </Col>
+                <Col span="11" offset="1">
+                <h3 class="red">* 手工费:</h3>
+                <Input v-model="currentItemData.emp_fee"></Input>
+                </Col>
+            </Row>
+            <p slot="footer" style="text-align: center">
+                <i-button type="success" v-on:click="modifyItem" long size="large">
+                    确 认 添 加
+                </i-button>
+            </p>
+
+        </Modal>
+
 
     </div>
 
@@ -54,14 +101,26 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getItemList, getItemType,addItem } from '../../api/item'
+import { getItemList, getItemType,addItem,addItemType,modifyItem} from '../../api/item'
 
 export default {
     data() {
         return {
-            itemType:0,
+            itemType:{
+                item_type_name: ""
+            },
             itemTypeData:[],
+            convertItemTypeObject:{},
+            selectItemTypeData:[],
             itemData: {
+                item_name: "",
+                item_type: "",
+                price: "",
+                times: "",
+                emp_fee: ""
+            },
+
+            currentItemData: {
                 item_name: "",
                 item_type: "",
                 price: "",
@@ -81,7 +140,7 @@ export default {
                 },
                 {
                     title: '项目类型',
-                    key: 'item_type'
+                    key: 'item_type_name'
                 },
                 {
                     title: '单价',
@@ -95,9 +154,68 @@ export default {
                     title: '手工费',
                     key: 'emp_fee'
                 },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 150,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.showModifyItemModel(params.row)
+                                    }
+                                }
+                            }, '编辑')
+                        ]);
+                    }
+                }
+            ],
+
+            itemTypeColumns:[
+                {
+                    title: '类型名称',
+                    key: 'item_type_name',
+                    width: 150
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 150,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.showModifyItemTypeModel(params.row)
+                                    }
+                                }
+                            }, '编辑')
+                        ]);
+                    }
+                }
             ],
             itemList: [],
             itemTotal: 0,
+
+            modifyAddItemModel: false,
+            modifyAddItemTypeModel: false
         }
     },
     computed: {
@@ -107,8 +225,8 @@ export default {
         ])
     },
     created() {
-        this.getItemList()
         this.getItemType()
+        this.getItemList()
     },
     methods: {
         getItemType() {
@@ -117,12 +235,18 @@ export default {
                     this.$Message.error(response.msg)
                 }else{
                     this.itemTypeData = response.data
-                    this.itemTypeData.unshift(
+                    this.selectItemTypeData = response.data.slice(0)
+                    this.selectItemTypeData.unshift(
                         {
                             "item_type_id": 0,
                             "item_type_name": "全部"
                         }
                     )
+                    this.itemTypeData.forEach((item, index) => {
+                        this.convertItemTypeObject[item.item_type_id] = item.item_type_name;
+                    })
+                    console.log(this.convertItemTypeObject)
+
                 }
             }).catch((error) => {
                 console.log(error)
@@ -135,6 +259,9 @@ export default {
                 }else{
                     this.itemList = response.data.data
                     this.itemTotal = response.data.totalSize
+                    this.itemList.forEach((item, index) => {
+                        item.item_type_name =  this.convertItemTypeObject[item.item_type]
+                    })
                 }
             }).catch((error) => {
                 console.log(error)
@@ -159,6 +286,47 @@ export default {
             }).catch((error) => {
                 console.log(error)
             })
+        },
+
+
+        showModifyItemModel(itemInfo) {
+            this.itemList.forEach((item, index) => {
+                if(item.item_id === itemInfo.item_id){
+                    this.currentItemData = item
+                }
+            })
+            this.modifyAddItemModel = true
+        },
+
+        modifyItem() {
+            modifyItem(this.itemType).then((response) => {
+                if(0 !== response.statusCode) {
+                    this.$Message.error(response.msg)
+                }else{
+                    this.modifyAddItemModel = false
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+
+        addItemType() {
+            addItemType(this.itemType).then((response) => {
+                if(0 !== response.statusCode) {
+                    this.$Message.error(response.msg)
+                }else{
+                    this.getItemType()
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+
+        showModifyItemTypeModel() {
+
+        },
+        modifyItemType() {
+
 
         }
     }
