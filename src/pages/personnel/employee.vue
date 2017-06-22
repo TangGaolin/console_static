@@ -130,7 +130,7 @@ export default {
                     key: 'phone_no'
                 },
                 {
-                    title: '部门',
+                    title: '门店',
                     key: 'shop_name'
                 },
                 {

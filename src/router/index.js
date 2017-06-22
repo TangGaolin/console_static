@@ -4,12 +4,13 @@ import store from '../store'
 import {LoadingBar} from 'iview'
 
 
-const Login = resolve => require(['../pages/account/Login'], resolve)
-const Layout = resolve => require(['../pages/Layout'], resolve)
-const dashboard = resolve => require(['../pages/dashboard'], resolve)
-const storeList = resolve => require(['../pages/personnel/store'], resolve)
-const storeInfo = resolve => require(['../pages/personnel/storeDetails'], resolve)
-const employee = resolve => require(['../pages/personnel/employee'], resolve)
+const Login = resolve       => require(['../pages/account/Login'], resolve)
+const Layout = resolve      => require(['../pages/Layout'], resolve)
+const dashboard = resolve   => require(['../pages/dashboard'], resolve)
+const storeList = resolve   => require(['../pages/personnel/store'], resolve)
+const storeInfo = resolve   => require(['../pages/personnel/storeDetails'], resolve)
+const employee = resolve    => require(['../pages/personnel/employee'], resolve)
+const item = resolve        => require(['../pages/basics/item'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -35,7 +36,7 @@ const router =  new Router({
         {
             path: "/personnel",
             component: Layout,
-            name: '门店 & 职工',
+            name: '门店职工',
             icon: 'person-stalker',
             hidden: false,
             children: [
@@ -58,20 +59,58 @@ const router =  new Router({
             ]
         },
         {
-            path: "/operation",
+            path: "/basics",
             component: Layout,
-            name: '项目 & 商品',
+            name: '项目商品',
             icon: 'ios-filing',
             hidden: false,
             children: [
                 {
                     name: "项目管理",
                     path: "items",
-                    component: dashboard
+                    component: item
                 },
                 {
                     name: "商品管理",
                     path: "goods",
+                    component: dashboard
+                }
+            ]
+        },
+        {
+            path: "/customer-center",
+            component: Layout,
+            name: '会员中心',
+            icon: 'ios-people',
+            hidden: false,
+            children: [
+                {
+                    name: "会员管理",
+                    path: "customer",
+                    component: item
+                },
+                {
+                    name: "会员跟踪",
+                    path: "analysis",
+                    component: dashboard
+                }
+            ]
+        },
+        {
+            path: "/shop-order",
+            component: Layout,
+            name: '店务收银',
+            icon: 'cash',
+            hidden: false,
+            children: [
+                {
+                    name: "单据审核",
+                    path: "order-check",
+                    component: item
+                },
+                {
+                    name: "订单管理",
+                    path: "order-manager",
                     component: dashboard
                 }
             ]
