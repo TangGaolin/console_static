@@ -11,6 +11,7 @@ const storeList = resolve   => require(['../pages/personnel/store'], resolve)
 const storeInfo = resolve   => require(['../pages/personnel/storeDetails'], resolve)
 const employee = resolve    => require(['../pages/personnel/employee'], resolve)
 const item = resolve        => require(['../pages/basics/item'], resolve)
+const goods = resolve        => require(['../pages/basics/goods'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -73,7 +74,7 @@ const router =  new Router({
                 {
                     name: "商品管理",
                     path: "goods",
-                    component: dashboard
+                    component: goods
                 }
             ]
         },
