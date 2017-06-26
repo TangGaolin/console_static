@@ -37,3 +37,31 @@ export function removeEmployee(params) {
 }
 
 
+
+export function addCashier(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/employee/addCashier',
+        method: 'post',
+        data
+    });
+}
+
+export function updateCashier(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/employee/updateCashier',
+        method: 'post',
+        data
+    });
+}
+
+export function removeCashier(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/employee/removeCashier',
+        method: 'post',
+        data
+    });
+}
+

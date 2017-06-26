@@ -8,4 +8,6 @@ Vue.component('ImportEmployee', require('./ImportEmployee.vue'))
 Vue.component('AddItem', require('./AddItem.vue'))
 Vue.component('AddItemType', require('./AddItemType.vue'))
 
+Vue.component('AddCashier', require('./AddCashier.vue'))
+
 

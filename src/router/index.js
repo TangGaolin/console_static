@@ -13,6 +13,9 @@ const employee = resolve    => require(['../pages/personnel/employee'], resolve)
 const item = resolve        => require(['../pages/basics/item'], resolve)
 const goods = resolve        => require(['../pages/basics/goods'], resolve)
 
+
+const cashier = resolve        => require(['../pages/account/cashier'], resolve)
+
 Vue.use(Router)
 const router =  new Router({
     routes: [
@@ -56,6 +59,11 @@ const router =  new Router({
                     name: "职工信息",
                     path: "employee",
                     component: employee
+                },
+                {
+                    name: "前台账号",
+                    path: "cashier",
+                    component: cashier
                 }
             ]
         },
@@ -131,6 +139,25 @@ const router =  new Router({
                 {
                     name: "品项数据",
                     path: "employee",
+                    component: dashboard
+                }
+            ]
+        },
+        {
+            path: "/account",
+            component: Layout,
+            name: '权限管理',
+            icon: 'settings',
+            hidden: false,
+            children: [
+                {
+                    name: "角色管理",
+                    path: "roles",
+                    component: dashboard
+                },
+                {
+                    name: "账户管理",
+                    path: "admin-account",
                     component: dashboard
                 }
             ]

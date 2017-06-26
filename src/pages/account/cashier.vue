@@ -9,18 +9,17 @@
 <template>
     <div class="content">
         <div class="content-header">
-            <h2>员工信息</h2>
+            <h2>收银账户管理</h2>
         </div>
         <div class="content-main">
             <div class="sub_title">
-                <Input v-model="searchData.emp_name_phone" placeholder="员工姓名/手机..." size = "large" style="width: 300px"  @keyup.13="getEmployeeList"></Input>
+                <Input v-model="searchData.emp_name_phone" placeholder="姓名/手机..." size = "large" style="width: 300px"  @keyup.13="getEmployeeList"></Input>
                 <Button type="primary" icon="ios-search" size = "large" v-on:click="getEmployeeList">查询</Button>
                 <span style="float:right">
-                    <AddEmployee :employeeInfo = employeeInfo
+                    <AddCashier :employeeInfo = employeeInfo
                                  :globalConfig = globalConfig
                                  :storeList = storeList
-                                 v-on:addEmployee = "addEmployee"></AddEmployee>
-                    <ImportEmployee :storeList = storeList></ImportEmployee>
+                                 v-on:addEmployee = "addEmployee"></AddCashier>
                 </span>
             </div>
             <br/>
@@ -31,42 +30,20 @@
             </div>
         </div>
 
-
         <Modal v-model="updateEmployeeModel" width="360">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="edit"></Icon>
-                <span>编辑员工</span>
+                <span>更新前台账户</span>
             </p>
             <h3 class="red">* 姓名:</h3>
             <Input v-model="currentEmployee.emp_name"></Input>
             <h3 class="red">* 手机:</h3>
             <Input v-model="currentEmployee.phone_no"></Input>
-            <br/><br/>
-            <Row>
-                <Col span="7">
-                <h3 class="red">* 性别:</h3>
-                <Radio-group v-model="currentEmployee.sex">
-                    <Radio label="1">女</Radio>
-                    <Radio label="0">男</Radio>
-                </Radio-group>
-                </Col>
-                <Col span="7" offset="1">
-                <h3 class="red">* 职位:</h3>
-                <Select v-model="currentEmployee.job" style="width:100px">
-                    <Option v-for="item in globalConfig.shop_job" :value="item" :key="item">{{ item }}</Option>
-                </Select>
-                <br/>
-                </Col>
-                <Col span="7" offset="1">
-                <h3 class="red">* 部门:</h3>
-                <Select v-model="currentEmployee.shop_id" style="width:100px">
-                    <Option v-for="item in storeList" :value="item.shop_id" :key="item">{{ item.shop_name }}</Option>
-                </Select>
-                </Col>
-            </Row>
-            <h3>备注:</h3>
-            <Input v-model="currentEmployee.remark" type = "textarea"></Input>
-            <p slot="footer" style="text-align: center">
+            <h3 class="red">* 部门:</h3>
+            <Select v-model="currentEmployee.shop_id">
+                <Option v-for="item in storeList" :value="item.shop_id" :key="item">{{ item.shop_name }}</Option>
+            </Select>
+            <p slot="footer">
                 <i-button type="success" v-on:click="updateEmployee" long size="large">
                     确 认 修 改
                 </i-button>
@@ -81,11 +58,11 @@
                 <span>删除确认</span>
             </p>
             <div style="text-align:center">
-                <p>员工删除之后，在前台收银就不会被显示！</p>
+                <p>禁用之后，该账户就无法登陆前台收银系统！</p>
                 <p>是否继续删除？</p>
             </div>
-            <div slot="footer">
-                <Button type="error" size="large" long  @click="removeEmployee">删除</Button>
+            <div slot="footer" >
+                <Button type="warning" size="large" long  @click="removeEmployee">禁 用</Button>
             </div>
         </Modal>
     </div>
@@ -96,7 +73,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getStoreList } from '../../api/shop'
-import { getEmployeeList, addEmployee, updateEmployee,removeEmployee } from '../../api/employee'
+import { getEmployeeList, addCashier, updateCashier, removeCashier } from '../../api/employee'
 
 export default {
     data() {
@@ -106,18 +83,12 @@ export default {
             employeeInfo: {
                 emp_name: "",
                 phone_no: "",
-                sex: 1,
                 shop_id: "",
-                job: "",
-                remark: ""
             },
             currentEmployee: {
                 emp_name: "",
                 phone_no: "",
-                sex: 1,
-                shop_id: "",
-                job: "",
-                remark: ""
+                shop_id: ""
             },
             updateEmployeeModel: false,
             removeEmployeeModel: false,
@@ -133,10 +104,6 @@ export default {
                 {
                     title: '门店',
                     key: 'shop_name'
-                },
-                {
-                    title: '职位',
-                    key: 'job'
                 },
                 {
                     title: '操作',
@@ -180,7 +147,7 @@ export default {
             empTotal:0,
             searchData: {
                 emp_name_phone: "",
-                is_server: 1,
+                is_cashier: 1,
                 cur_page: 1,
                 limit: 10
             }
@@ -230,17 +197,14 @@ export default {
             this.empData = this.getEmployeeList()
         },
         addEmployee() {
-            addEmployee(this.employeeInfo).then((response) => {
+            addCashier(this.employeeInfo).then((response) => {
                 if(0 != response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
                     this.getEmployeeList()
                     this.employeeInfo.emp_name = ""
                     this.employeeInfo.phone_no  = ""
-                    this.employeeInfo.sex = 1
                     this.employeeInfo.shop_id = ""
-                    this.employeeInfo.job = ""
-                    this.employeeInfo.remark = ""
                     this.$Message.success("添加成功！")
                 }
             }).catch((error) => {
@@ -256,16 +220,14 @@ export default {
             this.updateEmployeeModel = true
         },
         updateEmployee() {
-            updateEmployee(this.currentEmployee).then((response) => {
+            updateCashier(this.currentEmployee).then((response) => {
                 if(0 != response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
                     this.getEmployeeList()
                     this.currentEmployee.emp_name = ""
                     this.currentEmployee.phone_no  = ""
-                    this.currentEmployee.sex = 1
                     this.currentEmployee.shop_id = ""
-                    this.currentEmployee.job = ""
                     this.updateEmployeeModel = false
                     this.$Message.success("修改成功")
                 }
@@ -284,7 +246,7 @@ export default {
         },
 
         removeEmployee() {
-            removeEmployee(this.currentEmployee).then((response) => {
+            removeCashier(this.currentEmployee).then((response) => {
                 if(0 != response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
