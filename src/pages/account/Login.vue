@@ -5,7 +5,7 @@
     height: 100%;
     padding-top: 150px;
     padding-bottom: 200px;
-    background: #f7fafc;
+    background: #dfe0e2 url('../../assets/pattern.jpg') repeat
 }
 .wrapper > h1,p{
   text-align: center;
