@@ -12,6 +12,7 @@ Vue.use(iView)
 
 Vue.config.productionTip = false
 
+
 new Vue({
     el: '#app',
     router,

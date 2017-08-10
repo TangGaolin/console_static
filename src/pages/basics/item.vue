@@ -21,7 +21,7 @@
                                 {{ item.item_type_name }}
                             </Option>
                         </Select>
-                        <Input v-model="searchData.item_name" placeholder="项目名称..." size = "large" style="width: 200px"  @keyup.13="getItemList"></Input>
+                        <Input v-model="searchData.item_name" placeholder="项目名称..." size = "large" style="width: 200px"  @on-enter="getItemList"></Input>
                         <Button type="primary" icon="ios-search" size = "large" v-on:click="getItemList">查询</Button>
                         <span style="float:right">
                             <AddItem :itemTypeData = itemTypeData

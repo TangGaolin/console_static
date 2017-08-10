@@ -13,7 +13,7 @@
         </div>
         <div class="content-main">
             <div class="sub_title">
-                <Input v-model="searchData.emp_name_phone" placeholder="姓名/手机..." size = "large" style="width: 300px"  @keyup.13="getEmployeeList"></Input>
+                <Input v-model="searchData.emp_name_phone" placeholder="姓名/手机..." size = "large" style="width: 300px" @on-enter="getEmployeeList"></Input>
                 <Button type="primary" icon="ios-search" size = "large" v-on:click="getEmployeeList">查询</Button>
                 <span style="float:right">
                     <AddCashier :employeeInfo = employeeInfo

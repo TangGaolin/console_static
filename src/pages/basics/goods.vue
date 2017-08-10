@@ -1,6 +1,6 @@
 <style scoped>
     .content-main {
-        padding: 40px 40px;
+        padding: 26px 40px;
     }
     .ivu-form-item {
         margin-bottom: 8px;
@@ -12,40 +12,39 @@
             <h2>商品管理</h2>
         </div>
         <div class="content-main">
-
             <Tabs value="name1">
-                <Tab-pane label="商品列表" name="name1">
+                <Tab-pane label="产品列表" name="name1">
                     <div class="sub_title">
-                        <Select v-model="searchData.item_type" size = "large" style="width:100px">
-                            <Option v-for="item in selectItemTypeData" :value="item.item_type_id" :key="item.item_type_id">
-                                {{ item.item_type_name }}
+                        <Select v-model="searchData.good_brand_id" size = "large" style="width:100px">
+                            <Option v-for="item in selectBrandData" :value="item.good_brand_id" :key="item.good_brand_id">
+                                {{ item.good_brand_name }}
                             </Option>
                         </Select>
-                        <Input v-model="searchData.item_name" placeholder="商品名称..." size = "large" style="width: 200px"  @keyup.13="getItemList"></Input>
-                        <Button type="primary" icon="ios-search" size = "large" v-on:click="getItemList">查询</Button>
+                        <Input v-model="searchData.good_name" placeholder="商品名称..." size = "large" style="width: 200px"  @keyup.13="getGoodsData"></Input>
+                        <Button type="primary" icon="ios-search" size = "large" v-on:click="getGoodsData">查询</Button>
                         <span style="float:right">
-                            <AddItem :itemTypeData = itemTypeData
-                                     :itemData  = itemData
-                                     v-on:addItem  = "addItem"
-                            ></AddItem>
+                                <AddGood :brandData = brandData
+                                         v-on:addGood  = "getGoodsData"
+                                ></AddGood>
                         </span>
                     </div>
                     <br/>
-                    <Table stripe :columns="itemColumns" :data="itemList"></Table>
+                    <Table stripe :columns="goodColumns" :data="goodList"></Table>
                     <br/>
                     <div style="float: right;">
-                        <Page :total= itemTotal :current= "1" @on-change="changePage"></Page>
+                        <Page :total= goodTotal :current= "1" @on-change="changePage"></Page>
                     </div>
                 </Tab-pane>
 
-                <Tab-pane label="商品分类" name="name2">
-                    <AddItemType :itemType = itemType
-                                 v-on:addItemType = "addItemType"
-                    ></AddItemType>
-                    <br/><br/>
+                <Tab-pane label="品牌管理" name="name2">
+                    <div class="sub_title">
+                        <AddGoodBrand v-on:addBrand  = "getBrandData"
+                        ></AddGoodBrand>
+                    </div>
+                    <br/>
                     <Row>
                         <Col span="11">
-                            <Table border :columns="itemTypeColumns" :data="itemTypeData" style="width: 300px" ></Table>
+                            <Table border :columns="brandDataColumns" :data="goodList" style="width: 300px" ></Table>
                         </Col>
                         <Col span="11" offset="1">
 
@@ -55,53 +54,82 @@
             </Tabs>
         </div>
 
-        <Modal v-model="modifyAddItemModel" width="360">
+
+        <Modal v-model="goodModel" width="600">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="android-add"></Icon>
-                <span>编辑项目</span>
+                <span>修改商品</span>
             </p>
-            <h3 class="red">* 卡项名称:</h3>
-            <Input v-model="currentItemData.item_name"></Input>
-            <br/><br/>
             <Row>
-                <Col span="11">
-                <h3 class="red">* 卡项类别:</h3>
-                <Select v-model="currentItemData.item_type">
-                    <Option v-for="item in itemTypeData" :value="item.item_type_id" :key="item.item_type_id" >{{ item.item_type_name }}</Option>
+                <Col span="10">
+                <h3 class="red">* 商品名称:</h3>
+                <Input v-model="currentGoodData.good_name"></Input>
+                </Col>
+                <Col span="10" offset="1">
+                <h3 class="red">* 商品简拼:</h3>
+                <Input v-model="currentGoodData.pinyin" ></Input>
+                <p class="red">可能有些生僻字不能识别，需要手动调整！</p>
+                </Col>
+                <Col span="1">
+                <h3 class="red">&nbsp;</h3>
+                <Button type="ghost" @click="getPinyin">生成</Button>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col span="10">
+                <h3 class="red">* 选择品牌:</h3>
+                <Select v-model="currentGoodData.brand">
+                    <Option v-for="item in brandData" :value="item.good_brand_id" :key="item.good_brand_id" >{{ item.good_brand_name }}</Option>
                 </Select>
                 </Col>
-                <Col span="11" offset="1">
-                <h3 class="red">* 建议次数:</h3>
-                <Input v-model="currentItemData.times"></Input>
+
+                <Col span="10" offset="1">
+                <h3 class="red">* 规格:</h3>
+                <Input v-model="currentGoodData.speci">
+                <Select v-model="currentGoodData.unit" slot="append" style="width: 50px">
+                    <Option value="ml">ml</Option>
+                    <Option value="L">L</Option>
+                    <Option value="片">片</Option>
+                    <Option value="g">g</Option>
+                    <Option value="盒">盒</Option>
+                </Select>
+                </Input>
                 </Col>
             </Row>
+            <br/>
             <Row>
-                <Col span="11">
-                <h3 class="red">* 单价:</h3>
-                <Input v-model="currentItemData.price"></Input>
+                <Col span="10">
+                <h3 class="red">* 成本价(元):</h3>
+                <Input v-model="currentGoodData.cost" ></Input>
                 </Col>
-                <Col span="11" offset="1">
-                <h3 class="red">* 手工费:</h3>
-                <Input v-model="currentItemData.emp_fee"></Input>
+                <Col span="10" offset="1">
+                <h3 class="red">* 销售价(元):</h3>
+                <Input v-model="currentGoodData.price" ></Input>
                 </Col>
             </Row>
+            <br/>
+            <h3 class="red"> 描述:</h3>
+            <Input v-model="currentGoodData.descri" type="textarea" :rows="4" placeholder="请输入..."></Input>
+
             <p slot="footer" style="text-align: center">
-                <i-button type="success" v-on:click="modifyItem" long size="large">
+                <i-button type="success" v-on:click="updateGoodData()" long size="large">
                     确 认 修 改
                 </i-button>
             </p>
+
         </Modal>
 
-        <Modal v-model="modifyItemTypeModel" width="360">
+        <Modal v-model="brandModel" width="360">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="android-add"></Icon>
-                <span>编辑项目类型</span>
+                <span>编辑品牌</span>
             </p>
-            <h3 class="red">* 卡项名称:</h3>
-            <Input v-model="currentItemTypeData.item_type_name"></Input>
+            <h3 class="red">* 品牌名称:</h3>
+            <Input v-model="currentBrandData.good_brand_name"></Input>
 
             <p slot="footer" style="text-align: center">
-                <i-button type="success" v-on:click="modifyItemType" long size="large">
+                <i-button type="success" v-on:click="modifyBrand()" long size="large">
                     确 认 修 改
                 </i-button>
             </p>
@@ -114,62 +142,86 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getItemList, getItemType, addItem, addItemType, modifyItem, modifyItemType} from '../../api/item'
+import { getBrandList, updateBrand, getGoodsList, updateGood } from '../../api/good'
 
 export default {
     data() {
         return {
-            itemType:{
-                item_type_name: ""
-            },
-            itemTypeData:[],
-            convertItemTypeObject:{},
-            selectItemTypeData:[],
-            itemData: {
-                item_name: "",
-                item_type: "",
-                price: "",
-                times: "",
-                emp_fee: ""
-            },
-            currentItemData: {
-                item_name: "",
-                item_type: "",
-                price: "",
-                times: "",
-                emp_fee: ""
-            },
-            currentItemTypeData: {
-                item_type_name: ""
-            },
+            brandData: [],
+            selectBrandData: [],
+            brandModel: false,
+            goodModel: false,
+            brandDataColumns:[
+                {
+                    title: '品牌名称',
+                    key: 'good_brand_name',
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 150,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.showModifyBrandModel(params.row)
+                                    }
+                                }
+                            }, '编辑')
+                        ]);
+                    }
+                }
+            ],
+
+            currentBrandData:{},
+            currentGoodData :{},
+
             searchData:{
-                item_name: "",
-                item_type: 0,
+                good_name: "",
+                good_brand_id: 0,
                 cur_page: 1,
                 limit: 20,
             },
-            itemColumns: [
+
+            goodList: [],
+            goodTotal: 0,
+
+            convertBrandObject: {},
+
+            goodColumns: [
                 {
-                    title: '项目名称',
-                    key: 'item_name'
+                    title: '产品名称',
+                    key: 'good_name'
                 },
                 {
-                    title: '项目类型',
-                    key: 'item_type_name'
+                    title: '品牌',
+                    key: 'good_brand_name'
                 },
                 {
-                    title: '单价',
+                    title: '规格',
+                    key: 'speci',
+                    render: (h, params) => {
+                        return params.row.speci + params.row.unit
+                    }
+                },
+                {
+                    title: '成本(元)',
+                    key: 'cost'
+                },
+                {
+                    title: '销售价(元)',
                     key: 'price'
                 },
                 {
-                    title: '推荐次数',
-                    key: 'times'
-                },
-                {
-                    title: '手工费',
-                    key: 'emp_fee'
-                },
-                {
                     title: '操作',
                     key: 'action',
                     width: 150,
@@ -186,7 +238,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.showModifyItemModel(params.row)
+                                        this.showModifyGoodModel(params.row)
                                     }
                                 }
                             }, '编辑')
@@ -195,42 +247,6 @@ export default {
                 }
             ],
 
-            itemTypeColumns:[
-                {
-                    title: '类型名称',
-                    key: 'item_type_name',
-                    width: 150
-                },
-                {
-                    title: '操作',
-                    key: 'action',
-                    width: 150,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.showModifyItemTypeModel(params.row)
-                                    }
-                                }
-                            }, '编辑')
-                        ]);
-                    }
-                }
-            ],
-            itemList: [],
-            itemTotal: 0,
-
-            modifyAddItemModel: false,
-            modifyItemTypeModel: false
         }
     },
     computed: {
@@ -240,123 +256,111 @@ export default {
         ])
     },
     created() {
-        this.getItemType()
-        this.getItemList()
+        this.getBrandData()
+        this.getGoodsData()
     },
     methods: {
-        getItemType() {
-            getItemType().then((response) => {
+        //获取品牌数据
+        getBrandData() {
+            getBrandList().then((response) => {
                 if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
-                    this.itemTypeData = response.data
-                    this.selectItemTypeData = response.data.slice(0)
-                    this.selectItemTypeData.unshift(
+                    this.brandData = response.data
+                    this.selectBrandData = response.data.slice(0)
+                    this.selectBrandData.unshift(
                         {
-                            "item_type_id": 0,
-                            "item_type_name": "全部"
+                            "good_brand_id": 0,
+                            "good_brand_name": "全部"
                         }
                     )
-                    this.itemTypeData.forEach((item, index) => {
-                        this.convertItemTypeObject[item.item_type_id] = item.item_type_name;
+                    this.brandData.forEach((item) => {
+                        this.convertBrandObject[item.good_brand_id] = item.good_brand_name
                     })
                 }
             }).catch((error) => {
                 console.log(error)
             })
         },
-        getItemList() {
-            getItemList(this.searchData).then((response) => {
+
+        //编辑品牌
+        showModifyBrandModel(brand) {
+            this.brandData.forEach((item, index) => {
+                if(item.good_brand_id === brand.good_brand_id){
+                    this.currentBrandData = item
+                }
+            })
+            this.brandModel = true
+        },
+
+        //确认编辑品牌信息
+        modifyBrand() {
+            if(!this.currentBrandData.good_brand_name) {
+                this.$Message.error("品牌名称不能为空")
+                return
+            }
+            updateBrand(this.currentBrandData).then((response) => {
                 if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
-                    this.itemList = response.data.data
-                    this.itemTotal = response.data.totalSize
-                    this.itemList.forEach((item, index) => {
-                        item.item_type_name =  this.convertItemTypeObject[item.item_type]
+                    this.$Message.success("修改成功！")
+                    this.brandModel = false
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+
+        //获取商品列表
+        getGoodsData() {
+            getGoodsList(this.searchData).then((response) => {
+                if(0 !== response.statusCode) {
+                    this.$Message.error(response.msg)
+                }else{
+                    this.goodList = response.data.data
+                    this.goodTotal = response.data.totalSize
+                    this.goodList.forEach((item, index) => {
+                        item.good_brand_name =  this.convertBrandObject[item.brand]
                     })
                 }
             }).catch((error) => {
                 console.log(error)
             })
         },
-        changePage(){
 
-        },
-        addItem() {
-            addItem(this.itemData).then((response) => {
-                if(0 != response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.getItemList()
-                    this.itemData.item_name = ""
-                    this.itemData.item_type  = ""
-                    this.itemData.price = ""
-                    this.itemData.times = ""
-                    this.itemData.emp_fee = ""
-                    this.$Message.success("添加成功！")
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
-        },
-
-        showModifyItemModel(itemInfo) {
-            this.itemList.forEach((item, index) => {
-                if(item.item_id === itemInfo.item_id){
-                    this.currentItemData = item
+        //显示修改商品
+        showModifyGoodModel(good_info) {
+            this.goodList.forEach((item, index) => {
+                if(item.good_id === good_info.good_id){
+                    this.currentGoodData = item
                 }
             })
-            this.modifyAddItemModel = true
+            this.goodModel = true
         },
 
-        modifyItem() {
-            modifyItem(this.currentItemData).then((response) => {
+        updateGoodData() {
+            updateGood(this.currentGoodData).then((response) => {
                 if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
-                    this.modifyAddItemModel = false
-                    this.getItemList()
                     this.$Message.success("修改成功！")
+                    this.goodModel = false
                 }
             }).catch((error) => {
                 console.log(error)
             })
         },
 
-        addItemType() {
-            addItemType(this.itemType).then((response) => {
-                if(0 !== response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.getItemType()
-                    this.$Message.success("添加成功！")
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
+        changePage(page) {
+            this.searchData.cur_page = page
+            this.getGoodsData()
         },
 
-        showModifyItemTypeModel(itemTypeInfo) {
-            this.itemTypeData.forEach((item, index) => {
-                if(item.item_type_id === itemTypeInfo.item_type_id){
-                    this.currentItemTypeData = item
-                }
-            })
-            this.modifyItemTypeModel = true
-        },
-        modifyItemType() {
-            modifyItemType(this.currentItemTypeData).then((response) => {
-                if(0 !== response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.modifyItemTypeModel = false
-                    this.getItemType()
-                    this.$Message.success("修改成功！")
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
+        getPinyin() {
+            var pinyin = require("pinyin");
+            this.currentGoodData.pinyin = pinyin(this.currentGoodData.good_name, {
+                style: pinyin.STYLE_FIRST_LETTER
+            }).join('')
         }
     }
 }
