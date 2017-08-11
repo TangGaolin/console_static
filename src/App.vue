@@ -52,4 +52,8 @@ export default {
       color:#f60;
     }
 
+    .content-main {
+      padding: 40px 40px;
+    }
+
 </style>

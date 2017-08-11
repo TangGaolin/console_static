@@ -10,4 +10,11 @@ Vue.component('AddCashier', require('./AddCashier.vue'))
 Vue.component('AddGood', require('./AddGood.vue'))
 Vue.component('AddGoodBrand', require('./AddGoodBrand.vue'))
 
+Vue.component('UserInfo', require('./UserInfo.vue'))
+Vue.component('ItemList', require('./ItemList.vue'))
+Vue.component('OrderList', require('./OrderList.vue'))
+
+Vue.component('UseOrderList', require('./UseOrderList.vue'))
+Vue.component('LinkButton', require('./LinkButton.vue'))
+
 

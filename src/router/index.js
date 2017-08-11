@@ -3,18 +3,19 @@ import Router from 'vue-router'
 import store from '../store'
 import {LoadingBar} from 'iview'
 
-
-const Login = resolve       => require(['../pages/account/Login'], resolve)
-const Layout = resolve      => require(['../pages/Layout'], resolve)
-const dashboard = resolve   => require(['../pages/dashboard'], resolve)
-const storeList = resolve   => require(['../pages/personnel/store'], resolve)
-const storeInfo = resolve   => require(['../pages/personnel/storeDetails'], resolve)
-const employee = resolve    => require(['../pages/personnel/employee'], resolve)
-const item = resolve        => require(['../pages/basics/item'], resolve)
-const goods = resolve        => require(['../pages/basics/goods'], resolve)
-
+const Login     = resolve       => require(['../pages/account/Login'], resolve)
+const Layout    = resolve       => require(['../pages/Layout'], resolve)
+const dashboard = resolve       => require(['../pages/dashboard'], resolve)
+const storeList = resolve       => require(['../pages/personnel/store'], resolve)
+const storeInfo = resolve       => require(['../pages/personnel/storeDetails'], resolve)
+const employee  = resolve       => require(['../pages/personnel/employee'], resolve)
+const item      = resolve       => require(['../pages/basics/item'], resolve)
+const goods     = resolve       => require(['../pages/basics/goods'], resolve)
 
 const cashier = resolve        => require(['../pages/account/cashier'], resolve)
+const user = resolve           => require(['../pages/users/user'], resolve)
+const userTail = resolve       => require(['../pages/users/userTail'], resolve)
+const userInfo = resolve     => require(['../pages/users/userInfo'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -96,12 +97,18 @@ const router =  new Router({
                 {
                     name: "会员管理",
                     path: "customer",
-                    component: item
+                    component: user
+                },
+                {
+                    name: "会员详情",
+                    path: "customer-info",
+                    component: userInfo,
+                    hidden: true
                 },
                 {
                     name: "会员跟踪",
                     path: "analysis",
-                    component: dashboard
+                    component: userTail
                 }
             ]
         },

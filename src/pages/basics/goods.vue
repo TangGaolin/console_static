@@ -1,10 +1,4 @@
 <style scoped>
-    .content-main {
-        padding: 26px 40px;
-    }
-    .ivu-form-item {
-        margin-bottom: 8px;
-    }
 </style>
 <template>
     <div class="content">
@@ -44,7 +38,7 @@
                     <br/>
                     <Row>
                         <Col span="11">
-                            <Table border :columns="brandDataColumns" :data="goodList" style="width: 300px" ></Table>
+                            <Table border :columns="brandDataColumns" :data="brandData" style="width: 300px" ></Table>
                         </Col>
                         <Col span="11" offset="1">
 
@@ -63,11 +57,11 @@
             <Row>
                 <Col span="10">
                 <h3 class="red">* 商品名称:</h3>
-                <Input v-model="currentGoodData.good_name"></Input>
+                    <Input v-model="currentGoodData.good_name"></Input>
                 </Col>
                 <Col span="10" offset="1">
                 <h3 class="red">* 商品简拼:</h3>
-                <Input v-model="currentGoodData.pinyin" ></Input>
+                    <Input v-model="currentGoodData.pinyin" ></Input>
                 <p class="red">可能有些生僻字不能识别，需要手动调整！</p>
                 </Col>
                 <Col span="1">
