@@ -59,7 +59,11 @@
         },
         methods: {
             handleSuccess (res, file) {
-                this.$Message.success("导入成功！")
+                if(0 !== res.statusCode) {
+                    this.$Message.error(res.msg)
+                    return
+                }
+                this.$Message.success("导入成功!")
                 this.showModel = false
                 this.$emit('addUser')
             },
