@@ -17,4 +17,7 @@ Vue.component('OrderList', require('./OrderList.vue'))
 Vue.component('UseOrderList', require('./UseOrderList.vue'))
 Vue.component('LinkButton', require('./LinkButton.vue'))
 
+Vue.component('AddUser', require('./AddUser.vue'))
+Vue.component('ImportUser', require('./ImportUser.vue'))
+
 

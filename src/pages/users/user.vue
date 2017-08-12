@@ -15,13 +15,15 @@
                 </Select>
                 <Input v-model="searchData.user_name_phone" placeholder="会员姓名/手机..." size = "large" style="width: 300px"   @on-enter="getUserData"></Input>
                 <Button type="primary" icon="ios-search" size = "large" v-on:click="getUserData">查询</Button>
-                <!--<span style="float:right">-->
-                    <!--<AddEmployee :employeeInfo = employeeInfo-->
-                                 <!--:globalConfig = globalConfig-->
-                                 <!--:storeList = storeList-->
-                                 <!--v-on:addEmployee = "addEmployee"></AddEmployee>-->
-                    <!--<ImportEmployee :storeList = storeList></ImportEmployee>-->
-                <!--</span>-->
+                <span style="float:right">
+                    <AddUser
+                             :globalConfig = globalConfig
+                             :storeList = storeList
+                             v-on:addUser = "getUserData"
+                    ></AddUser>
+                    <ImportUser :storeList = storeList
+                                v-on:addUser = "getUserData"></ImportUser>
+                </span>
             </div>
             <br/>
 
@@ -140,11 +142,8 @@ export default {
                         ])
                     }
                 }
-
             ],
-
             currentUser:{},
-
             emps:[],
             loading: false,
         }
@@ -171,7 +170,7 @@ export default {
                     this.selectStoreData.unshift(
                         {
                             "shop_id": 0,
-                            "shop_name": "全部"
+                            "shop_name": "全部门店"
                         }
                     )
                 }
@@ -194,7 +193,6 @@ export default {
             this.userData.forEach((item, index) => {
                 if(item.uid === userInfo.uid){
                     this.currentUser = item
-//                    this.emps.push({emp_id: userInfo.emp_id,emp_name: userInfo.emp_name})
                 }
             })
 
@@ -234,6 +232,7 @@ export default {
                 }else{
                     this.$Message.success("修改成功")
                     this.userModel = false
+                    this.getUserData()
                 }
             }).catch((error) => {
                 console.log(error)

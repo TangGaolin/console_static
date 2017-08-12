@@ -62,3 +62,12 @@ export function getUseOrderList(params) {
     });
 }
 
+// 新增用户
+export function addUser(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/users/addUser',
+        method: 'post',
+        data
+    });
+}
