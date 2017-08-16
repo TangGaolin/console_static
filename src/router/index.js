@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store'
-import {LoadingBar} from 'iview'
+import { LoadingBar } from 'iview'
 
 const Login     = resolve       => require(['../pages/account/Login'], resolve)
 const Layout    = resolve       => require(['../pages/Layout'], resolve)
@@ -15,7 +15,8 @@ const goods     = resolve       => require(['../pages/basics/goods'], resolve)
 const cashier = resolve        => require(['../pages/account/cashier'], resolve)
 const user = resolve           => require(['../pages/users/user'], resolve)
 const userTail = resolve       => require(['../pages/users/userTail'], resolve)
-const userInfo = resolve     => require(['../pages/users/userInfo'], resolve)
+const userInfo = resolve       => require(['../pages/users/userInfo'], resolve)
+const orderCheck = resolve     => require(['../pages/orders/CheckOrder'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -120,9 +121,9 @@ const router =  new Router({
             hidden: false,
             children: [
                 {
-                    name: "单据审核",
+                    name: "业绩审核",
                     path: "order-check",
-                    component: item
+                    component: orderCheck
                 },
                 {
                     name: "订单管理",
@@ -190,6 +191,6 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(transition => {
 
-});
+})
 
 export default router
