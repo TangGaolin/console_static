@@ -5,7 +5,7 @@
     <div class="content">
 
         <div class="content-header">
-            <h2>业绩审核</h2>
+            <h2>消耗单据</h2>
         </div>
 
         <div class="content-main">
@@ -23,7 +23,7 @@
 
             <br/>
             <div v-if="orderList.data">
-                <Table stripe :columns="columns_yeji" :data="orderList.data"></Table>
+                <Table stripe :columns="columns_xiaohao" :data="orderList.data"></Table>
                 <br/>
                 <div style="float: right;">
                     <Page :total = orderList.totalSize :page-size = searchData.limit :current = searchData.cur_page @on-change="changePage"></Page>
@@ -37,10 +37,10 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { getOrderList } from '../../api/orders'
+    import { getUseOrderList } from '../../api/orders'
     import { getStoreList } from '../../api/shop'
     import { formatDate } from '../../utils/utils'
-    import OrderInfoTableRow from '../../components/OrderInfoTableRow.vue'
+    import OrderInfoTableRow from '../../components/UseOrderInfoTableRow.vue'
     export default {
         components: { OrderInfoTableRow },
         data() {
@@ -62,55 +62,51 @@
                         return date && date.valueOf() > Date.now();
                     }
                 },
-                columns_yeji:[
+                columns_xiaohao:[
                     {
                         type: 'expand',
                         width: 50,
                         render: (h, params) => {
                             return h(OrderInfoTableRow, {
                                 props: {
-                                    row: params.row
+                                    rows: params.row.items_info
                                 }
                             })
                         }
                     },
+
                     {
                         title: '门店',
                         key: 'shop_id',
+                        width: 85,
                         render: (h, params) => {
                             return  this.shopCovertData[params.row.shop_id]
                         }
                     },
                     {
-                        title: '订单号',
-                        key: 'order_id'
+                        title: '流水号',
+                        key: 'use_order_id'
                     },
                     {
-                        title: '会员姓名',
-                        key: 'user_name',
-                        width: 85
-
-                    },
-                    {
-                        title: '类 型',
-                        key: 'order_type',
-                        render: (h, params) => {
-                            return this.globalConfig.order_types[params.row.order_type]
-                        },
-                        width: 100
-                    },
-                    {
-                        title: '金 额',
-                        key: 'pay_money',
-                        width: 90
-                    },
-                    {
-                        title: '订单状态',
-                        key: 'status',
-                        render: (h, params) => {
-                            return this.globalConfig.order_status[params.row.status]
-                        },
+                        title: '会员',
                         width: 85,
+                        key: 'user_name'
+                    },
+                    {
+                        title: '金额(元)',
+                        width: 80,
+                        key: 'use_money'
+                    },
+                    {
+                        title: '操作项目',
+                        key: 'items_info',
+                        render: (h, params) => {
+                            let item_names = [];
+                            params.row.items_info.forEach((item) => {
+                                item_names.push(item.item_name)
+                            })
+                            return item_names.join(',')
+                        }
                     },
                     {
                         title: '收银员',
@@ -157,7 +153,7 @@
             },
             getOrderList() {
                 this.searchData.select_date = formatDate(this.chooseDate, "yyyy-MM-dd")
-                getOrderList(this.searchData).then((response) => {
+                getUseOrderList(this.searchData).then((response) => {
                     if(0 !== response.statusCode) {
                         this.$Message.error(response.msg)
                     }else{
@@ -167,6 +163,7 @@
                     console.log(error)
                 })
             },
+
             changePage(page) {
                 this.searchData.cur_page = page
                 this.getOrderList()

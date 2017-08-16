@@ -17,6 +17,7 @@ const user = resolve           => require(['../pages/users/user'], resolve)
 const userTail = resolve       => require(['../pages/users/userTail'], resolve)
 const userInfo = resolve       => require(['../pages/users/userInfo'], resolve)
 const orderCheck = resolve     => require(['../pages/orders/CheckOrder'], resolve)
+const orderUseCheck = resolve     => require(['../pages/orders/CheckUseOrder'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -126,7 +127,12 @@ const router =  new Router({
                     component: orderCheck
                 },
                 {
-                    name: "订单管理",
+                    name: "消耗单据",
+                    path: "use-order",
+                    component: orderUseCheck
+                },
+                {
+                    name: "单据管理",
                     path: "order-manager",
                     component: dashboard
                 }
