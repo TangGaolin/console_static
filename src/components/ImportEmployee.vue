@@ -14,6 +14,11 @@
             </p>
             <br/>
 
+            <Select v-model="shopData.shop_id" placeholder="选择门店...">
+                <Option v-for="item in storeList" :value = item.shop_id :key = item.shop_id>{{ item.shop_name }}</Option>
+            </Select>
+            <br/><br/>
+
             <Upload
                 type="drag"
                 :show-upload-list="false"
@@ -24,6 +29,7 @@
                 :on-format-error="handleFormatError"
                 :on-exceeded-size="handleMaxSize"
                 :before-upload="handleBeforeUpload"
+                :data = shopData
             >
                 <div style="padding: 20px 0">
                     <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
@@ -44,6 +50,9 @@
         data () {
             return {
                 importEmployee: false,
+                shopData: {
+                    shop_id: ""
+                },
                 actionUrl: process.env.API_ROOT + '/employee/importEmployee',
                 importEmployeeModel: "http://orsx11cb5.bkt.clouddn.com/ImportEmployeeModel.xlsx"
             }

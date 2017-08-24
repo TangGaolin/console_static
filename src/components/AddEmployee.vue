@@ -12,25 +12,25 @@
             <Input v-model="employeeInfo.phone_no"></Input>
             <br/><br/>
             <Row>
-                <Col span="7">
-                <h3 class="red">* 性别:</h3>
-                    <Radio-group v-model="employeeInfo.sex">
-                        <Radio label="1">女</Radio>
-                        <Radio label="0">男</Radio>
-                    </Radio-group>
-                </Col>
-                <Col span="7" offset="1">
-                <h3 class="red">* 职位:</h3>
+                <Col span="7" >
+                    <h3 class="red">* 职位:</h3>
                     <Select v-model="employeeInfo.job" style="width:100px">
                         <Option v-for="item in globalConfig.shop_job" :value="item" :key="item">{{ item }}</Option>
                     </Select>
                 <br/>
                 </Col>
                 <Col span="7" offset="1">
-                <h3 class="red">* 门店:</h3>
+                    <h3 class="red">* 门店:</h3>
                     <Select v-model="employeeInfo.shop_id" style="width:100px">
                         <Option v-for="item in storeList" :value="item.shop_id" :key="item">{{ item.shop_name }}</Option>
                     </Select>
+                </Col>
+                <Col span="7" offset="1">
+                    <h3 class="red">是否跨店:</h3>
+                    <Radio-group v-model="employeeInfo.is_server_all">
+                        <Radio label="1">是</Radio>
+                        <Radio label="0">否</Radio>
+                    </Radio-group>
                 </Col>
             </Row>
             <h3>备注:</h3>

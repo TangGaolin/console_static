@@ -13,6 +13,11 @@
         </div>
         <div class="content-main">
             <div class="sub_title">
+                <Select v-model="searchData.shop_id" size = "large" style="width:100px">
+                    <Option v-for="shop in selectStoreData" :value="shop.shop_id" :key="shop.shop_id">
+                        {{ shop.shop_name }}
+                    </Option>
+                </Select>
                 <Input v-model="searchData.emp_name_phone" placeholder="员工姓名/手机..." size = "large" style="width: 300px"   @on-enter="getEmployeeList"></Input>
                 <Button type="primary" icon="ios-search" size = "large" v-on:click="getEmployeeList">查询</Button>
                 <span style="float:right">
@@ -24,6 +29,8 @@
                 </span>
             </div>
             <br/>
+
+            <Tag color="blue">员工数量: {{empTotal}}</Tag>
             <Table stripe :columns="empColumns" :data="empData"></Table>
             <br/>
             <div style="float: right;">
@@ -43,25 +50,25 @@
             <Input v-model="currentEmployee.phone_no"></Input>
             <br/><br/>
             <Row>
-                <Col span="7">
-                <h3 class="red">* 性别:</h3>
-                <Radio-group v-model="currentEmployee.sex">
-                    <Radio label="1">女</Radio>
-                    <Radio label="0">男</Radio>
-                </Radio-group>
+                <Col span="7" >
+                    <h3 class="red">* 职位:</h3>
+                    <Select v-model="currentEmployee.job" style="width:100px">
+                        <Option v-for="item in globalConfig.shop_job" :value="item" :key="item">{{ item }}</Option>
+                    </Select>
+                    <br/>
                 </Col>
                 <Col span="7" offset="1">
-                <h3 class="red">* 职位:</h3>
-                <Select v-model="currentEmployee.job" style="width:100px">
-                    <Option v-for="item in globalConfig.shop_job" :value="item" :key="item">{{ item }}</Option>
-                </Select>
-                <br/>
-                </Col>
-                <Col span="7" offset="1">
-                <h3 class="red">* 部门:</h3>
+                <h3 class="red">* 门店:</h3>
                 <Select v-model="currentEmployee.shop_id" style="width:100px">
                     <Option v-for="item in storeList" :value="item.shop_id" :key="item">{{ item.shop_name }}</Option>
                 </Select>
+                </Col>
+                <Col span="7" offset="1">
+                    <h3 class="red">是否跨店:</h3>
+                    <Radio-group v-model="currentEmployee.is_server_all">
+                        <Radio label="1">是</Radio>
+                        <Radio label="0">否</Radio>
+                    </Radio-group>
                 </Col>
             </Row>
             <h3>备注:</h3>
@@ -102,10 +109,11 @@ export default {
         return {
             store: "all",
             storeList: [],
+            selectStoreData: [],
             employeeInfo: {
                 emp_name: "",
                 phone_no: "",
-                sex: 1,
+                is_server_all: 0,
                 shop_id: "",
                 job: "",
                 remark: ""
@@ -131,8 +139,20 @@ export default {
                 },
                 {
                     title: '门店',
-                    key: 'shop_name'
+                    key: 'shop_name',
+                    render: (h, params) => {
+                        return params.row.shop_name + ""
+                    }
+
                 },
+                {
+                    title: '跨店服务',
+                    key: 'is_server_all',
+                    render: (h, params) => {
+                        return params.row.is_server_all ? "是" : "否"
+                    }
+                },
+
                 {
                     title: '职位',
                     key: 'job'
@@ -176,6 +196,7 @@ export default {
             empData:[],
             empTotal:0,
             searchData: {
+                shop_id: 0,
                 emp_name_phone: "",
                 is_server: 1,
                 cur_page: 1,
@@ -205,11 +226,19 @@ export default {
                     this.$Message.error(response.msg)
                 }else{
                     this.storeList = response.data
+                    this.selectStoreData = response.data.slice(0)
+                    this.selectStoreData.unshift(
+                        {
+                            "shop_id": 0,
+                            "shop_name": "全部门店"
+                        }
+                    )
                 }
             }).catch((error) => {
                 console.log(error)
             })
         },
+
         getEmployeeList() {
             getEmployeeList(this.searchData).then((response) => {
                 if(0 !== response.statusCode) {

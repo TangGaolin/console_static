@@ -4,7 +4,7 @@
         <Modal v-model="showModel" width="360">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="android-add"></Icon>
-                <span>导入员工</span>
+                <span>导入会员</span>
             </p>
 
             <p>
@@ -17,7 +17,6 @@
                 <Option v-for="item in storeList" :value = item.shop_id :key = item.shop_id>{{ item.shop_name }}</Option>
             </Select>
             <br/><br/>
-
 
             <Upload
                 type="drag"
