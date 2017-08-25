@@ -31,6 +31,7 @@
         height: 60px;
         background: #fff;
         box-shadow: 0 1px 1px rgba(0,0,0,.1);
+        text-align: center;
     }
     .layout-body{
         width: 85%;
@@ -58,8 +59,10 @@
         <div class="layout-header">
             <div class="layout-logo">德美店务后台</div>
             <div class='layout-account'  v-if="userInfo !== null">
-                 {{userInfo.job }} * {{userInfo.emp_name}} |
-                 <a href="javascript:void(0);" v-on:click="logout">退出</a>
+                 {{userInfo.job }} *
+                <AdminAccount
+                    :userInfo = userInfo
+                ></AdminAccount>
             </div>
         </div>
 
