@@ -9,7 +9,7 @@
 <template>
     <div class="content">
         <div class="content-header">
-            <h2>员工信息</h2>
+            <h2>员工管理</h2>
         </div>
         <div class="content-main">
             <div class="sub_title">
@@ -131,7 +131,19 @@ export default {
             empColumns: [
                 {
                     title: '姓名',
-                    key: 'emp_name'
+                    key: 'emp_name',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('LinkButton', {
+                                props: {
+                                    to: "emp-info?emp_id=" + params.row.emp_id + "&shop_id=" + params.row.shop_id,
+                                    name: params.row.emp_name,
+                                    size: "small",
+                                    type: "text"
+                                },
+                            }, params.row.emp_name)
+                        ])
+                    }
                 },
                 {
                     title: '手机',

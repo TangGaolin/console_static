@@ -3,6 +3,9 @@
 </style>
 <template>
     <div class="content">
+        <div class="content-header">
+            <h2>会员管理 - 会员信息</h2>
+        </div>
         <div class="content-main">
             <div>
                 <h1>
@@ -47,9 +50,6 @@
     import { getUserDetail } from '../../api/user'
 
     export default {
-        props: {
-            empData: Array
-        },
         data() {
             return {
                 orderList:[],

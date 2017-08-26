@@ -18,6 +18,7 @@ const userTail = resolve       => require(['../pages/users/userTail'], resolve)
 const userInfo = resolve       => require(['../pages/users/userInfo'], resolve)
 const orderCheck = resolve     => require(['../pages/orders/CheckOrder'], resolve)
 const orderUseCheck = resolve     => require(['../pages/orders/CheckUseOrder'], resolve)
+const empInfo = resolve     => require(['../pages/personnel/empInfo'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -62,6 +63,12 @@ const router =  new Router({
                     name: "职工信息",
                     path: "employee",
                     component: employee
+                },
+                {
+                    name: "员工详情",
+                    path: "emp-info",
+                    component: empInfo,
+                    hidden: true
                 },
                 {
                     name: "前台账号",
