@@ -21,4 +21,7 @@ Vue.component('LinkButton', require('./LinkButton.vue'))
 Vue.component('AddUser', require('./AddUser.vue'))
 Vue.component('ImportUser', require('./ImportUser.vue'))
 
+Vue.component('EmpUsers', require('./EmpUsers.vue'))
+Vue.component('EmpOrders', require('./EmpOrders.vue'))
+
 
