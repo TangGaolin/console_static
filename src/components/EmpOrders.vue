@@ -24,7 +24,7 @@
         data() {
             return {
                 cur_page: 1,
-                limit: 15,
+                limit: 10,
                 orderData:[],
                 orderTotal: 0,
 

@@ -24,4 +24,7 @@ Vue.component('ImportUser', require('./ImportUser.vue'))
 Vue.component('EmpUsers', require('./EmpUsers.vue'))
 Vue.component('EmpOrders', require('./EmpOrders.vue'))
 
+Vue.component('ShopsDataView', require('./ShopsDataView.vue'))
+Vue.component('ShopDataView', require('./ShopDataView.vue'))
+
 

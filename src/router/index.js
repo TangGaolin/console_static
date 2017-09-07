@@ -17,8 +17,9 @@ const user = resolve           => require(['../pages/users/user'], resolve)
 const userTail = resolve       => require(['../pages/users/userTail'], resolve)
 const userInfo = resolve       => require(['../pages/users/userInfo'], resolve)
 const orderCheck = resolve     => require(['../pages/orders/CheckOrder'], resolve)
-const orderUseCheck = resolve     => require(['../pages/orders/CheckUseOrder'], resolve)
-const empInfo = resolve     => require(['../pages/personnel/empInfo'], resolve)
+const orderUseCheck = resolve  => require(['../pages/orders/CheckUseOrder'], resolve)
+const empInfo = resolve        => require(['../pages/personnel/empInfo'], resolve)
+const ShopData = resolve        => require(['../pages/analysis/ShopData'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -155,11 +156,11 @@ const router =  new Router({
                 {
                     name: "门店数据",
                     path: "storeData",
-                    component: dashboard
+                    component: ShopData
                 },
                 {
                     name: "品项数据",
-                    path: "employee",
+                    path: "empData",
                     component: dashboard
                 }
             ]

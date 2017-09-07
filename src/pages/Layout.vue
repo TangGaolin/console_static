@@ -57,7 +57,9 @@
 <template>
     <div class="layout">
         <div class="layout-header">
-            <div class="layout-logo">德美店务后台</div>
+            <div class="layout-logo">
+                <a href="/" style="color: #b3b6b7">德美店务后台</a>
+            </div>
             <div class='layout-account'  v-if="userInfo !== null">
                  {{userInfo.job }} *
                 <AdminAccount
