@@ -10,6 +10,7 @@
 
         <div class="content-main">
             <div class="sub_title">
+                <Input v-model="searchData.order_id" placeholder="订单号..."  style="width: 250px;float: left;padding-right: 10px;"   @on-enter=""></Input>
                 <Date-picker type="date" placeholder="选择日期" style="width: 200px;float: left" :options="options1" v-model = chooseDate></Date-picker>
                 &nbsp;&nbsp;
                 <Select v-model="searchData.shop_id" style="width:100px">
@@ -49,6 +50,7 @@
                 selectStoreData:[],
                 storeList:[],
                 searchData: {
+                    order_id: "",
                     shop_id: 0,
                     select_date: "",
                     cur_page: 1,

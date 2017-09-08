@@ -9,6 +9,8 @@
         </div>
 
         <div class="content-main">
+
+            <h2 style="text-align: center">整体数据</h2>
             <div class="sub_title">
 
                 <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;">
@@ -31,9 +33,12 @@
                 :countShopsData = countShopsData
             ></ShopsDataView>
 
-            <RadioGroup v-model="currentShop" type="button" @on-change="changeCurrentShop">
-                <Radio v-for="shop_id in selectStoreIds"  :key="shop_id" :label="shop_id">{{ shopCovertData[shop_id] }}</Radio>
-            </RadioGroup>
+            <h2 style="text-align: center">单店数据</h2>
+            <p style="text-align: center">
+                <RadioGroup v-model="currentShop" type="button" @on-change="changeCurrentShop">
+                    <Radio v-for="shop_id in selectStoreIds"  :key="shop_id" :label="shop_id">{{ shopCovertData[shop_id] }}</Radio>
+                </RadioGroup>
+            </p>
             <br/><br/>
             <ShopDataView
                     :shopData = currentShopData

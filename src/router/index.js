@@ -130,7 +130,7 @@ const router =  new Router({
             hidden: false,
             children: [
                 {
-                    name: "业绩审核",
+                    name: "业绩单据",
                     path: "order-check",
                     component: orderCheck
                 },
