@@ -10,6 +10,16 @@ export function addRole(params) {
     });
 }
 
+export function disableRole(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/admin/disableRole',
+        method: 'post',
+        data
+    });
+}
+
+
 export function getRoleList(params) {
     const data = params
     return fetch({
