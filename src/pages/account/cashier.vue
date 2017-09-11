@@ -247,7 +247,7 @@ export default {
 
         removeEmployee() {
             removeCashier(this.currentEmployee).then((response) => {
-                if(0 != response.statusCode) {
+                if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
                     this.getEmployeeList()

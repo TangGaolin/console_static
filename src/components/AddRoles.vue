@@ -1,16 +1,16 @@
 <template>
     <span>
-        <Button type="primary" icon="android-add" @click = "showModel = true">新建品牌</Button>
+        <Button type="primary" icon="android-add" @click = "showModel = true">新增角色</Button>
         <Modal v-model="showModel" width="360">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="android-add"></Icon>
-                <span>新增产品品牌</span>
+                <span>新增角色</span>
             </p>
-            <h3 class="red">* 品牌名称:</h3>
-            <Input v-model= "brandData.good_brand_name" ></Input>
+            <h3 class="red">* 角色名称:</h3>
+            <Input v-model= "roleData.role_name" ></Input>
 
             <p slot="footer" style="text-align: center">
-                <i-button type="success" v-on:click="addBrand" long size="large">
+                <i-button type="success" v-on:click="addRoleAction" long size="large">
                     确 认 添 加
                 </i-button>
             </p>
@@ -19,27 +19,27 @@
     </span>
 </template>
 <script>
-    import { addGoodBrand } from '../api/good'
+    import { addRole } from '../api/account'
     export default {
         data () {
             return {
                 showModel: false,
-                brandData: {
-                    good_brand_name: ""
+                roleData: {
+                    role_name: ""
                 }
             }
         },
         methods: {
-            addBrand: function () {
-                if(!this.brandData.good_brand_name) {
-                    this.$Message.error("品牌名称不能为空")
+            addRoleAction: function () {
+                if(!this.roleData.role_name) {
+                    this.$Message.error("角色名称不能为空")
                     return
                 }
-                addGoodBrand(this.brandData).then((response) => {
+                addRole(this.roleData).then((response) => {
                     if(0 !== response.statusCode) {
                         this.$Message.error(response.msg)
                     }else{
-                        this.$emit('addBrand')
+                        this.$emit('addRole')
                         this.$Message.success('添加成功')
                         this.showModel = false
                     }
