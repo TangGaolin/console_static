@@ -16,10 +16,10 @@
                 <Input v-model="searchData.emp_name_phone" placeholder="姓名/手机..." size = "large" style="width: 300px" @on-enter="getEmployeeList"></Input>
                 <Button type="primary" icon="ios-search" size = "large" v-on:click="getEmployeeList">查询</Button>
                 <span style="float:right">
-                    <AddCashier :employeeInfo = employeeInfo
+                    <AddCashier
                                  :globalConfig = globalConfig
                                  :storeList = storeList
-                                 v-on:addEmployee = "addEmployee"></AddCashier>
+                                 v-on:addEmployee = "getEmployeeList"></AddCashier>
                 </span>
             </div>
             <br/>
@@ -50,21 +50,6 @@
             </p>
 
         </Modal>
-
-
-        <Modal v-model="removeEmployeeModel" width="360">
-            <p slot="header" style="color:#f60;text-align:center">
-                <Icon type="information-circled"></Icon>
-                <span>删除确认</span>
-            </p>
-            <div style="text-align:center">
-                <p>禁用之后，该账户就无法登陆前台收银系统！</p>
-                <p>是否继续删除？</p>
-            </div>
-            <div slot="footer" >
-                <Button type="warning" size="large" long  @click="removeEmployee">禁 用</Button>
-            </div>
-        </Modal>
     </div>
 
 </template>
@@ -73,25 +58,19 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getStoreList } from '../../api/shop'
-import { getEmployeeList, addCashier, updateCashier, removeCashier } from '../../api/employee'
+import { getEmployeeList, updateCashier, removeCashier } from '../../api/employee'
 
 export default {
     data() {
         return {
             store: "all",
             storeList: [],
-            employeeInfo: {
-                emp_name: "",
-                phone_no: "",
-                shop_id: "",
-            },
             currentEmployee: {
                 emp_name: "",
                 phone_no: "",
                 shop_id: ""
             },
             updateEmployeeModel: false,
-            removeEmployeeModel: false,
             empColumns: [
                 {
                     title: '姓名',
@@ -133,7 +112,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.showRemoveEmployee(params.row)
+                                        this.delCashier(params.row)
                                     }
                                 }
                             }, '删除')
@@ -158,11 +137,6 @@ export default {
             'userInfo',
             'globalConfig'
         ])
-    },
-    filters: {
-        sexName(sex) {
-            return globalConfig.sex[sex];
-        }
     },
     created() {
         this.getStoreList()
@@ -196,21 +170,7 @@ export default {
             this.searchData.cur_page = page
             this.empData = this.getEmployeeList()
         },
-        addEmployee() {
-            addCashier(this.employeeInfo).then((response) => {
-                if(0 != response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.getEmployeeList()
-                    this.employeeInfo.emp_name = ""
-                    this.employeeInfo.phone_no  = ""
-                    this.employeeInfo.shop_id = ""
-                    this.$Message.success("添加成功！")
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
-        },
+
         modifyEmployee(emp_info) {
             this.empData.forEach((item, index) => {
                 if(item.emp_id === emp_info.emp_id){
@@ -221,13 +181,15 @@ export default {
         },
         updateEmployee() {
             updateCashier(this.currentEmployee).then((response) => {
-                if(0 != response.statusCode) {
+                if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
                     this.getEmployeeList()
-                    this.currentEmployee.emp_name = ""
-                    this.currentEmployee.phone_no  = ""
-                    this.currentEmployee.shop_id = ""
+                    this.currentEmployee = {
+                        emp_name: "",
+                        phone_no: "",
+                        shop_id: ""
+                    }
                     this.updateEmployeeModel = false
                     this.$Message.success("修改成功")
                 }
@@ -236,28 +198,28 @@ export default {
             })
         },
 
-        showRemoveEmployee(emp_info) {
-            this.empData.forEach((item, index) => {
-                if(item.emp_id === emp_info.emp_id){
-                    this.currentEmployee = item
-                }
-            })
-            this.removeEmployeeModel = true
-        },
 
-        removeEmployee() {
-            removeCashier(this.currentEmployee).then((response) => {
-                if(0 !== response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.getEmployeeList()
-                    this.removeEmployeeModel = false
-                    this.$Message.success("删除成功")
+        delCashier(cashierInfo) {
+            this.$Modal.confirm({
+                title: '确认删除？',
+                content: '<p>确认删除 <b>'+cashierInfo.emp_name+'</b> 这个前台账号吗？</p><p>删除之后，无法登录前台收银系统！</p>',
+                onOk: () => {
+                    removeCashier({
+                        emp_id: cashierInfo.emp_id
+                    }).then((response) => {
+                        if(0 !== response.statusCode) {
+                            this.$Message.error(response.msg)
+                        }else {
+                            this.$Message.success("删除成功！")
+                            this.getEmployeeList()
+                        }
+                    })
+                },
+                onCancel: () => {
+
                 }
-            }).catch((error) => {
-                console.log(error)
-            })
-        },
+            });
+        }
     }
 }
 </script>

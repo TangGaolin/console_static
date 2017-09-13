@@ -88,7 +88,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getStoreList } from '../../api/shop'
-import { getEmployeeList, addEmployee, updateEmployee,removeEmployee } from '../../api/employee'
+import { getEmployeeList, updateEmployee,removeEmployee } from '../../api/employee'
 
 export default {
     data() {
@@ -200,11 +200,7 @@ export default {
             'globalConfig'
         ])
     },
-    filters: {
-        sexName(sex) {
-            return globalConfig.sex[sex];
-        }
-    },
+
     created() {
         this.getStoreList()
         this.getEmployeeList()

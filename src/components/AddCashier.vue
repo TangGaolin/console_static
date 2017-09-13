@@ -26,19 +26,39 @@
     </span>
 </template>
 <script>
+    import { addCashier } from '../api/employee'
     export default {
         props: {
             globalConfig: Object,
             storeList: Array,
-            employeeInfo: Object
         },
         data () {
             return {
-                newEmployee: false
+                newEmployee: false,
+                employeeInfo: {
+                    emp_name: "",
+                    phone_no: "",
+                    shop_id: "",
+                },
             }
         },
         methods: {
             addEmployee: function () {
+                addCashier(this.employeeInfo).then((response) => {
+                    if(0 !== response.statusCode) {
+                        this.$Message.error(response.msg)
+                    }else{
+                        this.getEmployeeList()
+                        this.employeeInfo = {
+                            emp_name: "",
+                            phone_no: "",
+                            shop_id: "",
+                        }
+                        this.$Message.success("添加成功！")
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
                 this.$emit('addEmployee')
                 this.newEmployee = false
             }
