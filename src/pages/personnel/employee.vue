@@ -21,7 +21,7 @@
                 <Input v-model="searchData.emp_name_phone" placeholder="员工姓名/手机..." size = "large" style="width: 300px"   @on-enter="getEmployeeList"></Input>
                 <Button type="primary" icon="ios-search" size = "large" v-on:click="getEmployeeList">查询</Button>
                 <span style="float:right">
-                    <AddEmployee :employeeInfo = employeeInfo
+                    <AddEmployee
                                  :globalConfig = globalConfig
                                  :storeList = storeList
                                  v-on:addEmployee = "getEmployeeList"></AddEmployee>
@@ -80,20 +80,6 @@
             </p>
 
         </Modal>
-
-        <Modal v-model="removeEmployeeModel" width="360">
-            <p slot="header" style="color:#f60;text-align:center">
-                <Icon type="information-circled"></Icon>
-                <span>删除确认</span>
-            </p>
-            <div style="text-align:center">
-                <p>员工删除之后，在前台收银就不会被显示！</p>
-                <p>是否继续删除？</p>
-            </div>
-            <div slot="footer">
-                <Button type="error" size="large" long  @click="removeEmployee">删除</Button>
-            </div>
-        </Modal>
     </div>
 
 </template>
@@ -110,14 +96,7 @@ export default {
             store: "all",
             storeList: [],
             selectStoreData: [],
-            employeeInfo: {
-                emp_name: "",
-                phone_no: "",
-                is_server_all: 0,
-                shop_id: "",
-                job: "",
-                remark: ""
-            },
+
             currentEmployee: {
                 emp_name: "",
                 phone_no: "",
@@ -127,7 +106,6 @@ export default {
                 remark: ""
             },
             updateEmployeeModel: false,
-            removeEmployeeModel: false,
             empColumns: [
                 {
                     title: '姓名',
@@ -197,7 +175,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.showRemoveEmployee(params.row)
+                                        this.delEmployee(params.row)
                                     }
                                 }
                             }, '删除')
@@ -263,6 +241,7 @@ export default {
                 console.log(error)
             })
         },
+
         changePage(page) {
             this.searchData.cur_page = page
             this.empData = this.getEmployeeList()
@@ -276,18 +255,22 @@ export default {
             })
             this.updateEmployeeModel = true
         },
+
         updateEmployee() {
             updateEmployee(this.currentEmployee).then((response) => {
                 if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
-                    this.getEmployeeList()
-                    this.currentEmployee.emp_name = ""
-                    this.currentEmployee.phone_no  = ""
-                    this.currentEmployee.sex = 1
-                    this.currentEmployee.shop_id = ""
-                    this.currentEmployee.job = ""
+                    this.currentEmployee = {
+                        emp_name: "",
+                        phone_no: "",
+                        sex: 1,
+                        shop_id: "",
+                        job: "",
+                        remark: ""
+                    }
                     this.updateEmployeeModel = false
+                    this.getEmployeeList()
                     this.$Message.success("修改成功")
                 }
             }).catch((error) => {
@@ -295,28 +278,27 @@ export default {
             })
         },
 
-        showRemoveEmployee(emp_info) {
-            this.empData.forEach((item, index) => {
-                if(item.emp_id === emp_info.emp_id){
-                    this.currentEmployee = item
-                }
-            })
-            this.removeEmployeeModel = true
-        },
+        delEmployee(empInfo) {
+            this.$Modal.confirm({
+                title: '确认删除？',
+                content: '<p>确认删除 <b>'+empInfo.emp_name+'</b> 这个员工吗？</p><p>员工删除之后，在前台收银就不会被显示！</p>',
+                onOk: () => {
+                    removeEmployee({
+                        emp_id: empInfo.emp_id
+                    }).then((response) => {
+                        if(0 !== response.statusCode) {
+                            this.$Message.error(response.msg)
+                        }else {
+                            this.$Message.success("删除成功！")
+                            this.getEmployeeList()
+                        }
+                    })
+                },
+                onCancel: () => {
 
-        removeEmployee() {
-            removeEmployee(this.currentEmployee).then((response) => {
-                if(0 !== response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.getEmployeeList()
-                    this.removeEmployeeModel = false
-                    this.$Message.success("删除成功")
                 }
-            }).catch((error) => {
-                console.log(error)
-            })
-        },
+            });
+        }
     }
 }
 </script>
