@@ -6,7 +6,7 @@
                 <Icon type="android-add"></Icon>
                 <span>新增类别</span>
             </p>
-            <h3 class="red">* 卡项名称:</h3>
+            <h3 class="red">* 类别名称:</h3>
             <Input v-model= "itemType.item_type_name" ></Input>
 
             <p slot="footer" style="text-align: center">
@@ -19,20 +19,34 @@
     </span>
 </template>
 <script>
+    import { addItemType } from '../api/item'
+
     export default {
         props: {
-            itemType: Object,
         },
         data () {
             return {
-                newAddItemTypeModel: false
+                newAddItemTypeModel: false,
+                itemType: {
+                    item_type_name: ""
+                },
             }
         },
         methods: {
-            addItemType: function () {
-                this.$emit('addItemType')
-                this.newAddItemTypeModel = false
-            }
+            addItemType() {
+                addItemType(this.itemType).then((response) => {
+                    if(0 !== response.statusCode) {
+                        this.$Message.error(response.msg)
+                    }else{
+                        this.itemType.item_type_name = ""
+                        this.$Message.success("添加成功！")
+                        this.$emit('addItemType')
+                        this.newAddItemTypeModel = false
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+            },
         }
     }
 </script>

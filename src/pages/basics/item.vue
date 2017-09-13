@@ -25,8 +25,7 @@
                         <Button type="primary" icon="ios-search" size = "large" v-on:click="getItemList">查询</Button>
                         <span style="float:right">
                             <AddItem :itemTypeData = itemTypeData
-                                     :itemData  = itemData
-                                     v-on:addItem  = "addItem"
+                                     v-on:addItem  = "getItemList"
                             ></AddItem>
                         </span>
                     </div>
@@ -39,8 +38,8 @@
                 </Tab-pane>
 
                 <Tab-pane label="项目分类" name="name2">
-                    <AddItemType :itemType = itemType
-                                 v-on:addItemType = "addItemType"
+                    <AddItemType
+                            v-on:addItemType = "getItemType"
                     ></AddItemType>
                     <br/><br/>
                     <Row>
@@ -55,14 +54,28 @@
             </Tabs>
         </div>
 
-        <Modal v-model="modifyAddItemModel" width="360">
+        <Modal v-model="modifyAddItemModel" width="600">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="android-add"></Icon>
                 <span>编辑项目</span>
             </p>
-            <h3 class="red">* 卡项名称:</h3>
-            <Input v-model="currentItemData.item_name"></Input>
-            <br/><br/>
+
+            <Row>
+                <Col span="10">
+                <h3 class="red">* 卡项名称:</h3>
+                <Input v-model="currentItemData.item_name"></Input>
+                </Col>
+                <Col span="10" offset="1">
+                <h3 class="red">* 商品简拼:</h3>
+                <Input v-model="currentItemData.pinyin"></Input>
+                <p class="red">可能有些生僻字不能识别，需要手动调整！</p>
+                </Col>
+                <Col span="1">
+                <h3 class="red">&nbsp;</h3>
+                    <Button type="ghost" @click="getPinyin">生成</Button>
+                </Col>
+            </Row>
+            <br/>
             <Row>
                 <Col span="11">
                 <h3 class="red">* 卡项类别:</h3>
@@ -114,26 +127,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getItemList, getItemType, addItem, addItemType, modifyItem, modifyItemType} from '../../api/item'
+import { getItemList, getItemType, modifyItem, modifyItemType} from '../../api/item'
 
 export default {
     data() {
         return {
-            itemType:{
-                item_type_name: ""
-            },
             itemTypeData:[],
             convertItemTypeObject:{},
             selectItemTypeData:[],
-            itemData: {
-                item_name: "",
-                item_type: "",
-                price: "",
-                times: "",
-                emp_fee: ""
-            },
             currentItemData: {
                 item_name: "",
+                pinyin:"",
                 item_type: "",
                 price: "",
                 times: "",
@@ -233,12 +237,6 @@ export default {
             modifyItemTypeModel: false
         }
     },
-    computed: {
-        ...mapGetters([
-            'userInfo',
-            'globalConfig'
-        ])
-    },
     created() {
         this.getItemType()
         this.getItemList()
@@ -280,25 +278,10 @@ export default {
                 console.log(error)
             })
         },
-        changePage(){
 
-        },
-        addItem() {
-            addItem(this.itemData).then((response) => {
-                if(0 != response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.getItemList()
-                    this.itemData.item_name = ""
-                    this.itemData.item_type  = ""
-                    this.itemData.price = ""
-                    this.itemData.times = ""
-                    this.itemData.emp_fee = ""
-                    this.$Message.success("添加成功！")
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
+        changePage(page){
+            this.searchData.page = page
+            this.getItemList()
         },
 
         showModifyItemModel(itemInfo) {
@@ -318,19 +301,6 @@ export default {
                     this.modifyAddItemModel = false
                     this.getItemList()
                     this.$Message.success("修改成功！")
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
-        },
-
-        addItemType() {
-            addItemType(this.itemType).then((response) => {
-                if(0 !== response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.getItemType()
-                    this.$Message.success("添加成功！")
                 }
             }).catch((error) => {
                 console.log(error)
@@ -357,6 +327,17 @@ export default {
             }).catch((error) => {
                 console.log(error)
             })
+        },
+
+        getPinyin() {
+            console.log('xxx')
+            var pinyin = require("pinyin")
+            console.log(this.currentItemData)
+            this.currentItemData.pinyin = pinyin(this.currentItemData.item_name, {
+                style: pinyin.STYLE_FIRST_LETTER
+            }).join('')
+
+            console.log(this.currentItemData.pinyin)
         }
     }
 }

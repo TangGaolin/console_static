@@ -41,6 +41,9 @@
                     }else{
                         this.$emit('addBrand')
                         this.$Message.success('添加成功')
+                        this.brandData = {
+                            good_brand_name: ""
+                        }
                         this.showModel = false
                     }
                 }).catch((error) => {

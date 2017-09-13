@@ -1,32 +1,47 @@
 <template>
     <span>
         <Button type="primary" icon="android-add" @click = "newAddItemModel = true">新建项目</Button>
-        <Modal v-model="newAddItemModel" width="360">
+        <Modal v-model="newAddItemModel" width="600">
             <p slot="header" style="color:#f60;text-align:center" class = "red" >
                 <Icon type="android-add"></Icon>
                 <span>新增项目</span>
             </p>
-            <h3 class="red">* 卡项名称:</h3>
-            <Input v-model="itemData.item_name"></Input>
-            <br/><br/>
+
             <Row>
-                <Col span="11">
+                <Col span="10">
+                    <h3 class="red">* 卡项名称:</h3>
+                    <Input v-model="itemData.item_name"></Input>
+                </Col>
+                <Col span="10" offset="1">
+                    <h3 class="red">* 商品简拼:</h3>
+                    <Input v-model="itemData.pinyin"></Input>
+                    <p class="red">可能有些生僻字不能识别，需要手动调整！</p>
+                </Col>
+                <Col span="1">
+                    <h3 class="red">&nbsp;</h3>
+                    <Button type="ghost" @click="getPinyin">生成</Button>
+                </Col>
+            </Row>
+
+            <br/>
+            <Row>
+                <Col span="10">
                     <h3 class="red">* 卡项类别:</h3>
                     <Select v-model="itemData.item_type">
                         <Option v-for="item in itemTypeData" :value="item.item_type_id" :key="item.item_type_id" >{{ item.item_type_name }}</Option>
                     </Select>
                 </Col>
-                <Col span="11" offset="1">
+                <Col span="10" offset="1">
                     <h3 class="red">* 建议次数:</h3>
                      <Input v-model="itemData.times"></Input>
                 </Col>
             </Row>
             <Row>
-                <Col span="11">
+                <Col span="10">
                     <h3 class="red">* 单价:</h3>
                     <Input v-model="itemData.price"></Input>
                 </Col>
-                <Col span="11" offset="1">
+                <Col span="10" offset="1">
                     <h3 class="red">* 手工费:</h3>
                     <Input v-model="itemData.emp_fee"></Input>
                 </Col>
@@ -41,20 +56,52 @@
     </span>
 </template>
 <script>
+    import { addItem } from '../api/item'
     export default {
         props: {
             itemTypeData: Array,
-            itemData: Object,
         },
         data () {
             return {
-                newAddItemModel: false
+                newAddItemModel: false,
+                itemData: {
+                    item_name: "",
+                    pinyin:"",
+                    item_type: "",
+                    price: "",
+                    times: "",
+                    emp_fee: ""
+                }
             }
         },
         methods: {
-            addItem: function () {
-                this.$emit('addItem')
-                this.newAddItemModel = false
+            addItem() {
+                addItem(this.itemData).then((response) => {
+                    if(0 !== response.statusCode) {
+                        this.$Message.error(response.msg)
+                    }else{
+                        this.itemData = {
+                            item_name: "",
+                            pinyin:"",
+                            item_type: "",
+                            price: "",
+                            times: "",
+                            emp_fee: ""
+                        }
+                        this.newAddItemModel = false
+                        this.$emit('addItem')
+                        this.$Message.success("添加成功！")
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+            },
+
+            getPinyin() {
+                var pinyin = require("pinyin")
+                this.itemData.pinyin = pinyin(this.itemData.item_name, {
+                    style: pinyin.STYLE_FIRST_LETTER
+                }).join('')
             }
         }
     }

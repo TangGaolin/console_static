@@ -243,12 +243,6 @@ export default {
 
         }
     },
-    computed: {
-        ...mapGetters([
-            'userInfo',
-            'globalConfig'
-        ])
-    },
     created() {
         this.getBrandData()
         this.getGoodsData()

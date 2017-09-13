@@ -104,6 +104,17 @@
                     }else{
                         this.$emit('addGood')
                         this.$Message.success('添加成功')
+                        this.goodData = {
+                            good_name:"",
+                            pinyin:"",
+                            brand:"",
+                            speci:"",
+                            unit:"ml",
+                            cost:"",
+                            price:"",
+                            good_details:"",
+                            descri:""
+                        }
                         this.showModel = false
                     }
                 }).catch((error) =>{
