@@ -24,7 +24,7 @@
                     <AddEmployee :employeeInfo = employeeInfo
                                  :globalConfig = globalConfig
                                  :storeList = storeList
-                                 v-on:addEmployee = "addEmployee"></AddEmployee>
+                                 v-on:addEmployee = "getEmployeeList"></AddEmployee>
                     <ImportEmployee :storeList = storeList v-on:addEmployee = "getEmployeeList"></ImportEmployee>
                 </span>
             </div>
@@ -267,24 +267,7 @@ export default {
             this.searchData.cur_page = page
             this.empData = this.getEmployeeList()
         },
-        addEmployee() {
-            addEmployee(this.employeeInfo).then((response) => {
-                if(0 !== response.statusCode) {
-                    this.$Message.error(response.msg)
-                }else{
-                    this.getEmployeeList()
-                    this.employeeInfo.emp_name = ""
-                    this.employeeInfo.phone_no  = ""
-                    this.employeeInfo.sex = 1
-                    this.employeeInfo.shop_id = ""
-                    this.employeeInfo.job = ""
-                    this.employeeInfo.remark = ""
-                    this.$Message.success("添加成功！")
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
-        },
+
         modifyEmployee(emp_info) {
             this.empData.forEach((item, index) => {
                 if(item.emp_id === emp_info.emp_id){

@@ -45,22 +45,47 @@
     </span>
 </template>
 <script>
+    import { addEmployee} from '../api/employee'
     export default {
         props: {
             globalConfig: Object,
             storeList: Array,
-            employeeInfo: Object
         },
         data () {
             return {
+                employeeInfo: {
+                    emp_name: "",
+                    phone_no: "",
+                    is_server_all: 0,
+                    shop_id: "",
+                    job: "",
+                    remark: ""
+                },
                 newEmployee: false
             }
         },
         methods: {
-            addEmployee: function () {
-                this.$emit('addEmployee')
-                this.newEmployee = false
-            }
+            addEmployee() {
+                addEmployee(this.employeeInfo).then((response) => {
+                    if(0 !== response.statusCode) {
+                        this.$Message.error(response.msg)
+                    }else{
+                        this.employeeInfo= {
+                            emp_name: "",
+                            phone_no: "",
+                            is_server_all: 0,
+                            shop_id: "",
+                            job: "",
+                            remark: ""
+                        }
+                        this.$Message.success("添加成功！")
+                        this.$emit('addEmployee')
+                        this.newEmployee = false
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+            },
         }
     }
 </script>
