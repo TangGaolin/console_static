@@ -143,14 +143,13 @@ export default {
                     }
                 }
             ],
-            currentUser:{},
-            emps:[],
-            loading: false,
+            currentUser: {},
+            emps: [],
+            loading: false
         }
     },
     computed: {
         ...mapGetters([
-            'userInfo',
             'globalConfig'
         ])
     },
@@ -195,14 +194,17 @@ export default {
                     this.currentUser = item
                 }
             })
-
             this.userModel = true
+            if(0 === this.emps.length) {
+                this.getEmpList()
+            }
         },
 
         changePage(page) {
             this.searchData.cur_page = page
             this.getUserData()
         },
+
         getEmpList() {
             this.emps = []
             getEmployeeList({
@@ -237,8 +239,6 @@ export default {
             }).catch((error) => {
                 console.log(error)
             })
-
-
         }
 
     }
