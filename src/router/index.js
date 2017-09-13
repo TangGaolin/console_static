@@ -12,16 +12,17 @@ const employee  = resolve       => require(['../pages/personnel/employee'], reso
 const item      = resolve       => require(['../pages/basics/item'], resolve)
 const goods     = resolve       => require(['../pages/basics/goods'], resolve)
 
-const cashier   = resolve        => require(['../pages/account/cashier'], resolve)
-const user      = resolve           => require(['../pages/users/user'], resolve)
+const cashier   = resolve       => require(['../pages/account/cashier'], resolve)
+const user      = resolve       => require(['../pages/users/user'], resolve)
 const userTail  = resolve       => require(['../pages/users/userTail'], resolve)
 const userInfo  = resolve       => require(['../pages/users/userInfo'], resolve)
-const orderCheck = resolve     => require(['../pages/orders/CheckOrder'], resolve)
-const orderUseCheck = resolve  => require(['../pages/orders/CheckUseOrder'], resolve)
-const empInfo = resolve        => require(['../pages/personnel/empInfo'], resolve)
+const orderCheck = resolve      => require(['../pages/orders/CheckOrder'], resolve)
+const orderUseCheck = resolve   => require(['../pages/orders/CheckUseOrder'], resolve)
+const empInfo = resolve         => require(['../pages/personnel/empInfo'], resolve)
 const ShopData = resolve        => require(['../pages/analysis/ShopData'], resolve)
 const Roles = resolve           => require(['../pages/account/Roles'], resolve)
-const Authority = resolve        => require(['../pages/account/Authority'], resolve)
+const Authority = resolve       => require(['../pages/account/Authority'], resolve)
+const Account = resolve       => require(['../pages/account/Account'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -29,14 +30,14 @@ const router =  new Router({
         {
             path: '/login',
             component: Login,
-            hidden: true
+            show: false
         },
         {
             path: '/',
             component: Layout,
             redirect: '/dashboard',
             name: '首页',
-            hidden: true,
+            show: false,
             children: [
                 {
                     path: 'dashboard', 
@@ -49,34 +50,40 @@ const router =  new Router({
             component: Layout,
             name: '门店职工',
             icon: 'person-stalker',
-            hidden: false,
+            show: true,
+            node_id: 1,
             children: [
                 {
                     name: "门店管理",
                     path: "storeManage",
-                    component: storeList
+                    node_id: 2,
+                    component: storeList,
+                    show: true
                 },
                 {
                     name: "门店详情",
                     path: "storeManage/shoreInfo",
                     component: storeInfo,
-                    hidden: true
+                    show: false
                 },
                 {
                     name: "职工信息",
                     path: "employee",
+                    node_id: 5,
+                    show: true,
                     component: employee
                 },
                 {
                     name: "员工详情",
                     path: "emp-info",
                     component: empInfo,
-                    hidden: true
+                    show: false
                 },
                 {
                     name: "前台账号",
                     path: "cashier",
-                    component: cashier
+                    component: cashier,
+                    show: true,
                 }
             ]
         },
@@ -84,18 +91,23 @@ const router =  new Router({
             path: "/basics",
             component: Layout,
             name: '项目商品',
+            node_id: 13,
             icon: 'ios-filing',
-            hidden: false,
+            show: true,
             children: [
                 {
                     name: "项目管理",
                     path: "items",
-                    component: item
+                    component: item,
+                    node_id: 14,
+                    show: true
                 },
                 {
                     name: "商品管理",
                     path: "goods",
-                    component: goods
+                    component: goods,
+                    node_id: 17,
+                    show: true
                 }
             ]
         },
@@ -104,23 +116,25 @@ const router =  new Router({
             component: Layout,
             name: '会员中心',
             icon: 'ios-people',
-            hidden: false,
+            show: true,
             children: [
                 {
                     name: "会员管理",
                     path: "customer",
-                    component: user
+                    component: user,
+                    show: true
                 },
                 {
                     name: "会员详情",
                     path: "customer-info",
                     component: userInfo,
-                    hidden: true
+                    show: false
                 },
                 {
                     name: "会员跟踪",
                     path: "analysis",
-                    component: userTail
+                    component: userTail,
+                    show: true
                 }
             ]
         },
@@ -129,17 +143,19 @@ const router =  new Router({
             component: Layout,
             name: '收银单据',
             icon: 'cash',
-            hidden: false,
+            show: true,
             children: [
                 {
                     name: "业绩单据",
                     path: "order-check",
-                    component: orderCheck
+                    component: orderCheck,
+                    show: true
                 },
                 {
                     name: "消耗单据",
                     path: "use-order",
-                    component: orderUseCheck
+                    component: orderUseCheck,
+                    show: true
                 }
             ]
         },
@@ -148,17 +164,19 @@ const router =  new Router({
             component: Layout,
             name: '数据统计',
             icon: 'ios-pie',
-            hidden: false,
+            show: true,
             children: [
                 {
                     name: "门店数据",
                     path: "storeData",
-                    component: ShopData
+                    component: ShopData,
+                    show: true
                 },
                 {
                     name: "品项数据",
                     path: "empData",
-                    component: dashboard
+                    component: dashboard,
+                    show: true
                 }
             ]
         },
@@ -167,23 +185,25 @@ const router =  new Router({
             component: Layout,
             name: '权限管理',
             icon: 'settings',
-            hidden: false,
+            show: true,
             children: [
                 {
                     name: "角色管理",
                     path: "roles",
-                    component: Roles
+                    component: Roles,
+                    show: true
                 },
                 {
                     name: "编辑角色",
                     path: "edit-roles",
                     component: Authority,
-                    hidden: true,
+                    show: false
                 },
                 {
                     name: "账户管理",
                     path: "admin-account",
-                    component: dashboard
+                    component: Account,
+                    show: true
                 }
             ]
         }

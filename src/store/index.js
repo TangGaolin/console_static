@@ -9,11 +9,11 @@ import getters from './getters'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-	modules: {
-		account
-	},
-	actions,
-	getters
+    modules: {
+        account
+    },
+    actions,
+    getters
 })
 
 

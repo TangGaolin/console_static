@@ -28,5 +28,6 @@ Vue.component('ShopsDataView', require('./ShopsDataView.vue'))
 Vue.component('ShopDataView', require('./ShopDataView.vue'))
 
 Vue.component('AddRole', require('./AddRoles.vue'))
+Vue.component('AddAdminAccount', require('./AddAdminAccount.vue'))
 
 

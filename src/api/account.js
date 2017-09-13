@@ -55,3 +55,30 @@ export function modifyRoleAccess(params) {
         data
     });
 }
+
+export function openAccount(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/admin/openAccount',
+        method: 'post',
+        data
+    });
+}
+
+export function getAccountList(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/admin/getAccountList',
+        method: 'post',
+        data
+    });
+}
+
+export function disableAccount(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/admin/disableAccount',
+        method: 'post',
+        data
+    });
+}

@@ -101,7 +101,7 @@ export default {
         delRbac(roleInfo) {
             this.$Modal.confirm({
                 title: '确认删除？',
-                content: '<p>确认删除 '+roleInfo.role_name+' 这个角色吗？</p>',
+                content: '<p>确认删除 <b>'+roleInfo.role_name+'</b> 这个角色吗？</p>',
                 onOk: () => {
                     disableRole({
                         role_id: roleInfo.role_id

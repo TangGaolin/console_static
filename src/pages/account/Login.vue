@@ -90,8 +90,11 @@ export default {
                             password: this.formInline.password
                         }).then(() => {
                           // 登录成功
+                          this.$store.dispatch('getNodeAction')
                           this.$router.push('/')
                         })
+
+
                     } else {
                         this.$Message.error('表单验证错误!')
                     }

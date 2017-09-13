@@ -4,7 +4,7 @@ import router from '../../router'
 
 const state = {
     userInfo: Cookies.getJSON('userinfo'),
-    userRulesNode: router.options.routes,
+    userRulesNode: "",
     globalConfig: ""
 }
 const mutations = {
@@ -19,6 +19,10 @@ const mutations = {
     [types.SET_CONFIG] (state, config) {
         state.globalConfig = config
     },
+    [types.SET_ROLE_NODE] (state, data) {
+        state.userRulesNode = data
+    },
+
 }
 export default {
     state: state,

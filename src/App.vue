@@ -18,13 +18,21 @@ export default {
     },
     created() {
         this.getConfig()
+        this.getRoleNode()
     },
     methods: {
         getConfig(){
             if(this.globalConfig === "") {
                 this.$store.dispatch('getConfigAction')
             }
+        },
+
+        getRoleNode(){
+            if("" === this.globalConfig) {
+                this.$store.dispatch('getNodeAction')
+            }
         }
+
     }
 }
 </script>
