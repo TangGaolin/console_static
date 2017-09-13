@@ -54,14 +54,20 @@
                     shop_id: ""
                 },
                 actionUrl: process.env.API_ROOT + '/employee/importEmployee',
-                importEmployeeModel: "http://orsx11cb5.bkt.clouddn.com/ImportEmployeeModel.xlsx"
+                importEmployeeModel: "http://orsx11cb5.bkt.clouddn.com/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx"
             }
         },
         methods: {
             handleSuccess (res, file) {
                 // 因为上传过程为实例，这里模拟添加 url
+                if(0 !== res.statusCode) {
+                    this.$Message.error(res.msg)
+                    return
+                }
                 this.$Message.success("导入成功！")
                 this.importEmployee = false
+                this.shopData.shop_id = ""
+                this.$emit('addEmployee')
             },
             handleFormatError (file) {
                 this.$Notice.warning({

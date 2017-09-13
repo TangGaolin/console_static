@@ -25,7 +25,7 @@
                                  :globalConfig = globalConfig
                                  :storeList = storeList
                                  v-on:addEmployee = "addEmployee"></AddEmployee>
-                    <ImportEmployee :storeList = storeList></ImportEmployee>
+                    <ImportEmployee :storeList = storeList v-on:addEmployee = "getEmployeeList"></ImportEmployee>
                 </span>
             </div>
             <br/>

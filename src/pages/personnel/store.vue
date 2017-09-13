@@ -56,13 +56,11 @@
                             <Icon type="edit"></Icon>
                             编辑
                         </a>
-                        <!-- <a :href="'#/personnel/storeManage/shoreInfo?shop_id=' + item.shop_id"> -->
-                            <ul>
-                                <p>地区: {{item.city.join('.')}}</p>
-                                <p>电话: {{item.shop_tel}}</p>
-                                <p>详细地址: {{item.address}}</p>
-                            </ul>
-                        <!-- </a> -->
+                        <ul>
+                            <p>地区: {{item.city.join('.')}}</p>
+                            <p>电话: {{item.shop_tel}}</p>
+                            <p>详细地址: {{item.address}}</p>
+                        </ul>
                     </Card>
                 </Col>
             </Row>
@@ -150,7 +148,7 @@ export default {
     methods: {
         getStoreList() {
             getStoreList().then((response) => {
-                if(0 != response.statusCode) {
+                if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
                     this.storeList = response.data
@@ -158,7 +156,7 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error)
-                })
+            })
         },
         editStoreInfo(shop_id) {
             this.storeList.forEach((item, index) => {
@@ -170,7 +168,7 @@ export default {
         },
         updateStoreInfo() {
             updateStoreInfo(this.currentStore).then((response) => {
-                if(0 != response.statusCode) {
+                if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
                     this.editStoreModel = false
@@ -182,19 +180,25 @@ export default {
 
         },
         addStore() {
+            if(!this.newStore.shop_name) {
+                this.$Message.error("门店名称不能为空!")
+                return
+            }
             addStore(this.newStore).then((response) => {
-                if(0 != response.statusCode) {
+                if(0 !== response.statusCode) {
                     this.$Message.error(response.msg)
                 }else{
                     this.getStoreList()
-                    this.newStore.shop_name = ""
-                    this.newStore.shop_tel  = ""
-                    this.newStore.shop_address = ""
-                    this.newStore.shop_city = ""
+                    this.newStore = {
+                        shop_name:"",
+                        shop_tel:"",
+                        address:"",
+                        city:[],
+                    }
                     this.newStoreModel = false
+                    this.$Message.success("添加成功")
                 }
-                })
-                .catch((error) => {
+            }).catch((error) => {
                     console.log(error)
                 }
             )
