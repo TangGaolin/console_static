@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "iview": "^2.0.0-rc.17",
+    "js-pinyin": "^0.1.9",
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "v-charts": "^1.7.12",

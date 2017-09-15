@@ -128,6 +128,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getItemList, getItemType, modifyItem, modifyItemType} from '../../api/item'
+import {getPinyin} from '../../utils/utils'
 
 export default {
     data() {
@@ -328,16 +329,8 @@ export default {
                 console.log(error)
             })
         },
-
         getPinyin() {
-            console.log('xxx')
-            var pinyin = require("pinyin")
-            console.log(this.currentItemData)
-            this.currentItemData.pinyin = pinyin(this.currentItemData.item_name, {
-                style: pinyin.STYLE_FIRST_LETTER
-            }).join('')
-
-            console.log(this.currentItemData.pinyin)
+            this.currentGoodData.pinyin = getPinyin(this.currentGoodData.good_name)
         }
     }
 }

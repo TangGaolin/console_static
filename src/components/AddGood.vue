@@ -70,6 +70,7 @@
 </template>
 <script>
     import { addGood } from '../api/good'
+    import {getPinyin} from '../utils/utils'
     export default {
         props: {
             brandData: Array
@@ -122,10 +123,8 @@
                 })
             },
             getPinyin() {
-                var pinyin = require("pinyin");
-                this.goodData.pinyin = pinyin(this.goodData.good_name, {
-                    style: pinyin.STYLE_FIRST_LETTER
-                }).join('')
+
+                this.goodData.pinyin = getPinyin(this.goodData.good_name)
             }
         }
     }

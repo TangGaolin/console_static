@@ -1,5 +1,6 @@
-export function formatDate(date, format){
+import pinyin from 'js-pinyin'
 
+export function formatDate(date, format){
     var tf = function(i){
         return (i < 10 ? '0' : '') + i
     }
@@ -23,6 +24,10 @@ export function formatDate(date, format){
             case 'ss':
                 return tf(date.getSeconds());
                 break;
-        };
+        }
     });
-};
+}
+
+export function getPinyin(hanzi){
+    return pinyin.getCamelChars(hanzi).toLowerCase()
+}

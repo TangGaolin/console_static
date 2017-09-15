@@ -57,6 +57,7 @@
 </template>
 <script>
     import { addItem } from '../api/item'
+    import {getPinyin} from '../utils/utils'
     export default {
         props: {
             itemTypeData: Array,
@@ -96,12 +97,8 @@
                     console.log(error)
                 })
             },
-
             getPinyin() {
-                var pinyin = require("pinyin")
-                this.itemData.pinyin = pinyin(this.itemData.item_name, {
-                    style: pinyin.STYLE_FIRST_LETTER
-                }).join('')
+                this.itemData.pinyin = getPinyin(this.itemData.item_name)
             }
         }
     }
