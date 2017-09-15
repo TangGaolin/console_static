@@ -24,6 +24,8 @@ const Roles = resolve           => require(['../pages/account/Roles'], resolve)
 const Authority = resolve       => require(['../pages/account/Authority'], resolve)
 const Account = resolve       => require(['../pages/account/Account'], resolve)
 
+const ItemData = resolve       => require(['../pages/analysis/ItemData'], resolve)
+
 Vue.use(Router)
 const router =  new Router({
     routes: [
@@ -174,8 +176,8 @@ const router =  new Router({
                 },
                 {
                     name: "品项数据",
-                    path: "empData",
-                    component: dashboard,
+                    path: "itemData",
+                    component: ItemData,
                     show: true
                 }
             ]

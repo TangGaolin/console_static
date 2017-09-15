@@ -53,8 +53,7 @@ export const getConfigAction = ({commit}, params) => {
 export const getNodeAction = ({commit}, params) => {
     return new Promise((resolve, reject)=> {
         getNode(params).then((response) => {
-            console.log(response)
-            if(0 != response.statusCode) {
+            if(0 !== response.statusCode) {
                 Message.error(response.msg)
             }else{
                 let roleNode = response.data
@@ -69,7 +68,6 @@ export const getNodeAction = ({commit}, params) => {
                     })
                 })
 
-                console.log(roleNodeObject)
                 commit(types.SET_ROLE_NODE, roleNodeObject); //获得的数据通过mutation，存入store中
                 resolve(response)
             }

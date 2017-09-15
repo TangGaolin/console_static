@@ -177,7 +177,6 @@
                     return
                 }
                 this.currentShopData = this.shopsData[this.currentShop]
-
             }
 
         }

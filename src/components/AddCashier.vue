@@ -48,19 +48,19 @@
                     if(0 !== response.statusCode) {
                         this.$Message.error(response.msg)
                     }else{
-                        this.getEmployeeList()
                         this.employeeInfo = {
                             emp_name: "",
                             phone_no: "",
                             shop_id: "",
                         }
                         this.$Message.success("添加成功！")
+                        this.$emit('addEmployee')
+                        this.newEmployee = false
                     }
                 }).catch((error) => {
                     console.log(error)
                 })
-                this.$emit('addEmployee')
-                this.newEmployee = false
+
             }
         }
     }

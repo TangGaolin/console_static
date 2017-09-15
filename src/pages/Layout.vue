@@ -138,7 +138,6 @@
             },
 
             checkNode() {
-                console.log("xxx",this.userRulesNode)
                 router.options.routes.forEach((item_1) => {
                     if(item_1.show) {
                         if(item_1.node_id) {

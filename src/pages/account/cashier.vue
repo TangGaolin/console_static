@@ -149,6 +149,12 @@ export default {
                     this.$Message.error(response.msg)
                 }else{
                     this.storeList = response.data
+                    this.storeList.unshift(
+                        {
+                            shop_id: 0,
+                            shop_name: "总部"
+                        }
+                    )
                 }
             }).catch((error) => {
                 console.log(error)
