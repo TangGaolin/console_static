@@ -14,7 +14,7 @@
             <br/><br/>
             <h3 class="red">* 门店:</h3>
             <Select v-model="employeeInfo.shop_id">
-                <Option v-for="item in storeList" :value="item.shop_id" :key="item">{{ item.shop_name }}</Option>
+                <Option v-for="item in storeList" :value="item.shop_id" :key="item.shop_id">{{ item.shop_name }}</Option>
             </Select>
             <p slot="footer" style="text-align: center">
                 <i-button type="success" v-on:click="addEmployee" long size="large">

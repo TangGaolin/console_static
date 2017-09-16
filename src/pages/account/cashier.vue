@@ -41,7 +41,7 @@
             <Input v-model="currentEmployee.phone_no"></Input>
             <h3 class="red">* 部门:</h3>
             <Select v-model="currentEmployee.shop_id">
-                <Option v-for="item in storeList" :value="item.shop_id" :key="item">{{ item.shop_name }}</Option>
+                <Option v-for="item in storeList" :value="item.shop_id" :key="item.shop_id">{{ item.shop_name }}</Option>
             </Select>
             <p slot="footer">
                 <i-button type="success" v-on:click="updateEmployee" long size="large">

@@ -7,22 +7,22 @@ export function formatDate(date, format){
     return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
         switch(a){
             case 'yyyy':
-                return tf(date.getFullYear());
+                return tf(date.getFullYear())
                 break;
             case 'MM':
-                return tf(date.getMonth() + 1); // 返回 用世界时表示时的月份，该值是 0（一月） ~ 11（十二月） 之间中的一个整数。所以要加1
+                return tf(date.getMonth() + 1) // 返回 用世界时表示时的月份，该值是 0（一月） ~ 11（十二月） 之间中的一个整数。所以要加1
                 break;
             case 'mm':
-                return tf(date.getMinutes());
+                return tf(date.getMinutes())
                 break;
             case 'dd':
-                return tf(date.getDate());
+                return tf(date.getDate())
                 break;
             case 'HH':
-                return tf(date.getHours());
+                return tf(date.getHours())
                 break;
             case 'ss':
-                return tf(date.getSeconds());
+                return tf(date.getSeconds())
                 break;
         }
     });
