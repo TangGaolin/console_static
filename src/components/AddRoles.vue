@@ -41,6 +41,7 @@
                     }else{
                         this.$emit('addRole')
                         this.$Message.success('添加成功')
+                        this.roleData.role_name = ""
                         this.showModel = false
                     }
                 }).catch((error) => {

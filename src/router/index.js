@@ -22,9 +22,9 @@ const empInfo = resolve         => require(['../pages/personnel/empInfo'], resol
 const ShopData = resolve        => require(['../pages/analysis/ShopData'], resolve)
 const Roles = resolve           => require(['../pages/account/Roles'], resolve)
 const Authority = resolve       => require(['../pages/account/Authority'], resolve)
-const Account = resolve       => require(['../pages/account/Account'], resolve)
+const Account = resolve         => require(['../pages/account/Account'], resolve)
 
-const ItemData = resolve       => require(['../pages/analysis/ItemData'], resolve)
+const ItemData = resolve        => require(['../pages/analysis/ItemData'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -66,7 +66,7 @@ const router =  new Router({
                     name: "门店详情",
                     path: "storeManage/shoreInfo",
                     component: storeInfo,
-                    show: false
+                    show: false //未开发
                 },
                 {
                     name: "职工信息",
@@ -85,6 +85,7 @@ const router =  new Router({
                     name: "前台账号",
                     path: "cashier",
                     component: cashier,
+                    node_id: 10,
                     show: true,
                 }
             ]
@@ -92,7 +93,7 @@ const router =  new Router({
         {
             path: "/basics",
             component: Layout,
-            name: '项目商品',
+            name: '品项管理',
             node_id: 13,
             icon: 'ios-filing',
             show: true,
@@ -105,7 +106,7 @@ const router =  new Router({
                     show: true
                 },
                 {
-                    name: "商品管理",
+                    name: "产品管理",
                     path: "goods",
                     component: goods,
                     node_id: 17,
@@ -119,10 +120,12 @@ const router =  new Router({
             name: '会员中心',
             icon: 'ios-people',
             show: true,
+            node_id: 20,
             children: [
                 {
                     name: "会员管理",
                     path: "customer",
+                    node_id: 21,
                     component: user,
                     show: true
                 },
@@ -136,7 +139,7 @@ const router =  new Router({
                     name: "会员跟踪",
                     path: "analysis",
                     component: userTail,
-                    show: true
+                    show: false  // 待开发
                 }
             ]
         },
@@ -145,18 +148,21 @@ const router =  new Router({
             component: Layout,
             name: '收银单据',
             icon: 'cash',
+            node_id: 25,
             show: true,
             children: [
                 {
                     name: "业绩单据",
                     path: "order-check",
                     component: orderCheck,
+                    node_id: 26,
                     show: true
                 },
                 {
                     name: "消耗单据",
                     path: "use-order",
                     component: orderUseCheck,
+                    node_id: 28,
                     show: true
                 }
             ]
@@ -167,18 +173,20 @@ const router =  new Router({
             name: '数据统计',
             icon: 'ios-pie',
             show: true,
+            node_id: 30,
             children: [
                 {
                     name: "门店数据",
                     path: "storeData",
                     component: ShopData,
+                    node_id: 31,
                     show: true
                 },
                 {
                     name: "品项数据",
                     path: "itemData",
                     component: ItemData,
-                    show: true
+                    show: false // 待开发
                 }
             ]
         },
@@ -187,12 +195,14 @@ const router =  new Router({
             component: Layout,
             name: '权限管理',
             icon: 'settings',
+            node_id: 1001,
             show: true,
             children: [
                 {
                     name: "角色管理",
                     path: "roles",
                     component: Roles,
+                    node_id: 1002,
                     show: true
                 },
                 {
@@ -205,6 +215,7 @@ const router =  new Router({
                     name: "账户管理",
                     path: "admin-account",
                     component: Account,
+                    node_id: 1006,
                     show: true
                 }
             ]
@@ -215,17 +226,14 @@ const router =  new Router({
 
 router.beforeEach((to, from, next) => {
     var account = store.state.account
-
     if(to.path === '/login') {
         return next()
     }
-
     if (typeof(account.userInfo) === "undefined") {
         return next(`/login?redirect=${encodeURIComponent(to.path)}`)
     }else {
         return next()
     }
-
 })
 
 router.afterEach(transition => {

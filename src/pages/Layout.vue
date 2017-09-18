@@ -143,7 +143,6 @@
                         if(item_1.node_id) {
                             item_1.show = this.userRulesNode[item_1.node_id]
                         }
-
                         if(item_1.children) {
                             item_1.children.forEach((item_2) => {
                                 if(item_2.show) {

@@ -22,13 +22,12 @@ export default {
     },
     methods: {
         getConfig(){
-            if(this.globalConfig === "") {
+            if("" === this.globalConfig) {
                 this.$store.dispatch('getConfigAction')
             }
         },
-
         getRoleNode(){
-            if("" === this.globalConfig) {
+            if("" === this.userRulesNode) {
                 this.$store.dispatch('getNodeAction')
             }
         }

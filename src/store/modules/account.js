@@ -13,7 +13,7 @@ const mutations = {
         Cookies.set('userinfo', account)
     },
     [types.UNSET_ACCOUNT] (state) {
-    	state.userInfo = null
+        state.userInfo = null
         Cookies.remove('userinfo')
     },
     [types.SET_CONFIG] (state, config) {
@@ -21,8 +21,7 @@ const mutations = {
     },
     [types.SET_ROLE_NODE] (state, data) {
         state.userRulesNode = data
-    },
-
+    }
 }
 export default {
     state: state,

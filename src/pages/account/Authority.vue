@@ -76,15 +76,12 @@ export default {
             }
         },
         checkThirdNode(secNode){
-            let flag = true
+            secNode.checked = false
             secNode.child.forEach((item) => {
-                if(!item.checked) {
-                    flag = false
+                if(item.checked) {
+                    secNode.checked = true
                 }
             })
-            if(flag) {
-                secNode.checked = flag
-            }
         },
         saveRoleData() {
             let resource = []
@@ -93,7 +90,6 @@ export default {
                     secNode.child.forEach((thirdNode) => {
                         if(thirdNode.checked) {
                             resource.push(thirdNode.node_id)
-                            console.log(thirdNode.title)
                         }
                     })
                 })
