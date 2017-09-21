@@ -30,4 +30,6 @@ Vue.component('ShopDataView', require('./ShopDataView.vue'))
 Vue.component('AddRole', require('./AddRoles.vue'))
 Vue.component('AddAdminAccount', require('./AddAdminAccount.vue'))
 
+Vue.component('Calendar', require('./Calendar.vue'))
+
 

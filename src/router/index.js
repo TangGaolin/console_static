@@ -25,6 +25,7 @@ const Authority = resolve       => require(['../pages/account/Authority'], resol
 const Account = resolve         => require(['../pages/account/Account'], resolve)
 
 const ItemData = resolve        => require(['../pages/analysis/ItemData'], resolve)
+const OrderTimeData = resolve        => require(['../pages/analysis/OrderTimeData'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -187,6 +188,12 @@ const router =  new Router({
                     path: "itemData",
                     component: ItemData,
                     show: false // 待开发
+                },
+                {
+                    name: "预约统计",
+                    path: "OrderTimeData",
+                    component: OrderTimeData,
+                    show: true
                 }
             ]
         },
