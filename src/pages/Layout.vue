@@ -1,6 +1,6 @@
 <style scoped>
     .layout{
-        border-top: 5px solid #44b549;
+        border-top: 3px solid #e7e8eb;
         background: #e7e8eb;
         position: relative;
         border-radius: 4px;
@@ -73,12 +73,12 @@
                 <Row>
                     <i-col span="4">
                         <Menu :active-name="$route.path | activeName" width="auto" :open-names="[currentMenu]" theme="light">
-                            <Submenu v-for="(item,index) in routerNodes" :name="item.path"  :key="item.path" v-if="item.show">
+                            <Submenu v-for="(item,index) in userRulesNode" :name="item.path"  :key="item.path" v-if="item.show && item.open">
                                 <template slot="title">
                                     <Icon :type="item.icon" :size=16></Icon>
                                     {{item.name}}
                                 </template>
-                                <router-link v-for="(child, childIndex) in item.children" :key="child.path" :to="item.path + '/' + child.path" v-if="child.show">
+                                <router-link v-for="(child, childIndex) in item.children" :key="child.path" :to="item.path + '/' + child.path" v-if="child.show && child.open">
                                     <Menu-item :name="item.path+'/'+child.path" :index="item.path+'/'+child.path" >{{child.name}} </Menu-item>
                                 </router-link>
                             </Submenu>
@@ -103,12 +103,10 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import router from '../router'
     export default {
         data() {
             return {
                 currentMenu: "",
-                routerNodes: router.options.routes
             }
         },
         filters: {
@@ -123,9 +121,7 @@
               'userRulesNode'
             ])
         },
-        watch: {
-            "userRulesNode": "checkNode"
-        },
+
         created() {
             this.currentMenu = "/" + this.$route.path.split("/")[1]
         },
@@ -134,25 +130,6 @@
                 this.$store.dispatch('logoutAction',{}).then(() => {
                     // 退出成功
                     this.$router.push('/login')
-                })
-            },
-
-            checkNode() {
-                router.options.routes.forEach((item_1) => {
-                    if(item_1.show) {
-                        if(item_1.node_id) {
-                            item_1.show = this.userRulesNode[item_1.node_id]
-                        }
-                        if(item_1.children) {
-                            item_1.children.forEach((item_2) => {
-                                if(item_2.show) {
-                                    if(item_2.node_id) {
-                                        item_2.show = this.userRulesNode[item_2.node_id]
-                                    }
-                                }
-                            })
-                        }
-                    }
                 })
             }
 

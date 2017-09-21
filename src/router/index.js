@@ -33,7 +33,7 @@ const router =  new Router({
         {
             path: '/login',
             component: Login,
-            show: false
+            show: false  //是否需要显示
         },
         {
             path: '/',
@@ -193,6 +193,7 @@ const router =  new Router({
                     name: "预约统计",
                     path: "OrderTimeData",
                     component: OrderTimeData,
+                    node_id: 33,
                     show: true
                 }
             ]

@@ -13,7 +13,8 @@ export default {
     computed: {
         ...mapGetters([
             'userInfo',
-            'globalConfig'
+            'globalConfig',
+            'userRulesNode'
         ])
     },
     created() {
