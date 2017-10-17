@@ -1,31 +1,35 @@
 <style scoped>
-.wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding-top: 150px;
-    padding-bottom: 200px;
-    background: #dfe0e2 url('../../assets/pattern.jpg') repeat
-}
-.wrapper > h1,p{
-  text-align: center;
-  vertical-align: middle;
-  margin-bottom: 10px;
-}
-.login {
-    margin: 0 auto;
-    width: 350px;
-    height: 100%;
-}
-.login-box {
-    padding: 20px;
-    border: 1px #ccc solid;
-    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.12);
-    background: #FFF;
-}
-.font-green-color {
-    color: #249b2a;
-}
+    .wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding-top: 150px;
+        padding-bottom: 200px;
+        background: #dfe0e2 url('../../assets/pattern.jpg') repeat
+    }
+    .wrapper > h1,p{
+      text-align: center;
+      vertical-align: middle;
+      margin-bottom: 10px;
+    }
+    .login {
+        margin: 0 auto;
+        width: 350px;
+        height: 100%;
+    }
+    .login-box {
+        padding: 20px;
+        border: 1px #ccc solid;
+        box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.12);
+        background: #FFF;
+    }
+    .font-green-color {
+        color: #249b2a;
+    }
+
+    .captcha {
+        border-radius: 5px;
+    }
 </style>
 
 <template>
@@ -41,6 +45,18 @@
                     <Form-item prop="password">
                         <Input v-model="formInline.password" type="password" size="large" icon="key" placeholder="输入密码..."></Input>
                     </Form-item>
+                    <Row>
+                        <Col span="11">
+                            <Form-item prop="captcha">
+                                <Input v-model="formInline.captcha" size="large" placeholder="输入验证码..."></Input>
+                            </Form-item>
+                        </Col>
+                        <Col span="8" offset="1">
+                            <Form-item>
+                                <img :src="src" alt="验证码" class = "captcha" @click="getCaptcha()">
+                            </Form-item>
+                        </Col>
+                    </Row>
                     <Form-item>
                         <i-button type="success" @click.native="handleSubmit('formInline')" long size="large">
                         登&emsp;&emsp;录
@@ -58,9 +74,12 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
             return {
+                src: "",
+                the_src: process.env.API_ROOT + '/admin/captcha',
                 formInline: {
                     user: '',
                     password: '',
+                    captcha:''
                 },
                 ruleInline: {
                     user: [{
@@ -77,28 +96,35 @@ export default {
                         min: 6,
                         message: '密码长度不能小于6位',
                         trigger: 'blur'
+                    }],
+                    captcha:[{
+                        required: true,
+                        message: '请填验证码',
+                        trigger: 'blur'
                     }]
                 }
             }
+        },
+
+        created() {
+            this.getCaptcha()
         },
         methods: {
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.$store.dispatch('loginAction', {
-                            user: this.formInline.user,
-                            password: this.formInline.password
-                        }).then(() => {
+                        this.$store.dispatch('loginAction', this.formInline).then(() => {
                           // 登录成功
                           this.$store.dispatch('getNodeAction')
                           this.$router.push('/')
                         })
-
-
                     } else {
                         this.$Message.error('表单验证错误!')
                     }
                 })
+            },
+            getCaptcha() {
+                this.src = process.env.API_ROOT + '/admin/captcha' + "?r=" + Math.random();
             }
         }
 }
