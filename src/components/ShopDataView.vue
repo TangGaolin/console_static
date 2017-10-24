@@ -22,7 +22,7 @@
                     dimension: ['day'],
                     metrics: ['yeji', 'xiaohao'],
                     yAxisName: ['业绩', '消耗'],
-                    yAxisType: ['KMB'],
+                    yAxisType: [''],
                     area: false,
                     labelMap: {
                         day: '日期',

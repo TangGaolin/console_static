@@ -10,13 +10,11 @@
         padding-top:20px;
     }
     .card ul {
-        min-height: 82px;
-
+        min-height: 84px;
     }
     .card ul p{
         display: -webkit-box;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
         overflow: hidden
     }
     .card a{
@@ -46,7 +44,7 @@
             </div>
 
             <Row>
-                <Col span="6" class="card" v-for="item in storeList" :key="item.shop_id">
+                <Col span="8" class="card" v-for="item in storeList" :key="item.shop_id">
                     <Card>
                         <p slot="title">
                             <Icon type="ios-home-outline"></Icon>

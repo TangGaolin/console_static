@@ -21,10 +21,10 @@
                         </div>
                         <div class="full-calendar-content">
                             <ul class="events">
-                                <li v-for="(item, key) in orderTimeData[day.date]" @click="showDetail(item, key, day.date)">
+                                <li v-for="(item, key) in orderTimeData[day.date]" @click="showDetail(item, day.date)">
                                     {{ key }}
                                     &nbsp;
-                                    {{item.length}} 人
+                                    {{item.user_num}} 人
                                 </li>
                             </ul>
                         </div>
@@ -34,17 +34,23 @@
             </tbody>
         </table>
 
-        <Modal v-model="showModel" width="360">
+
+        <div v-for="time in orderTimes">
+            <orderTimeTable
+                :orderTimeData = time
+            ></orderTimeTable>
+        </div>
+
+        <Modal v-model="showModel" width="720">
             <p slot="header" style="color:#f60;text-align:center">
                 <span> {{year + "年" + currentDay + "日" }} * {{currentShopName}} * 预约详情</span>
             </p>
-            <Timeline>
-                <Timeline>
-                    <TimelineItem color="blue" v-for="item in orderTimeInfo" :key = "item.id">
-                        {{ item.order_time.slice(-8, -3) }} {{item.user_name}} &nbsp;&nbsp; 备注：{{item.remark}}
-                    </TimelineItem>
-                </Timeline>
-            </Timeline>
+
+
+            <orderTimeTable
+                    :orderTimeData = currentData
+            ></orderTimeTable>
+
             <div slot="footer">
 
             </div>
@@ -53,7 +59,12 @@
 </template>
 
 <script>
+    import orderTimeTable from './orderTimeTable.vue'
+    import { getOrderTimeView } from '../api/analysis'
+    import { formatDate } from '../utils/utils'
     export default {
+
+        components: { orderTimeTable },
         props: {
             year: Number,
             month: Number,
@@ -63,8 +74,11 @@
             return {
                 showModel: false,
                 orderTimeInfo: [],
-                currentShopName: "",
+                orderTimes:[],
+                orderIndex:[],
+                currentData: [],
                 currentDay: "",
+                currentShopName: "",
                 dates: [],
                 now: new Date()
             }
@@ -113,10 +127,35 @@
                 }
             },
 
-            showDetail(orderTimeInfo,shopName, day){
-                this.orderTimeInfo = orderTimeInfo
-                this.currentShopName = shopName
+            showDetail(orderTimeInfo, day){
+
                 this.currentDay = day
+                this.currentShopName = orderTimeInfo['shop_name']
+                let index = orderTimeInfo.shop_id + "-" + day
+                let index_value = this.orderIndex.indexOf(index)
+                if(index_value >= 0) {
+                    this.currentData = this.orderTimes[index_value]
+                    this.showModel = true
+                    return
+                }
+                this.orderIndex.push(index)
+                let queryDate = this.year + '-' + this.month + '-' + day
+                let start_time = queryDate
+                let end_time   = queryDate + " 23:59:59"
+                getOrderTimeView({
+                    shop_id: orderTimeInfo.shop_id,
+                    start_time: start_time,
+                    end_time: end_time
+                }).then((response) => {
+                    if(0 !== response.statusCode) {
+                        this.$Message.error(response.msg)
+                    }else{
+                        this.currentData = response.data
+                        this.orderTimes.push(response.data)
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
                 this.showModel = true
             }
         },

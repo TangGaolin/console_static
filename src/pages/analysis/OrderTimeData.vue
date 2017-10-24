@@ -28,6 +28,8 @@
                 :month = month
             ></Calendar>
         </div>
+
+
   </div>
 </template>
 
@@ -91,15 +93,20 @@
                                 this.convertOrderTimeData[day] = {}
                             }
                             if(!this.convertOrderTimeData[day][item.shop_name]) {
-                                this.convertOrderTimeData[day][item.shop_name] = []
+                                this.convertOrderTimeData[day][item.shop_name] = {
+                                    shop_id: item.shop_id,
+                                    shop_name: item.shop_name,
+                                    user_num: 1,
+                                }
+                            }else{
+                                ++this.convertOrderTimeData[day][item.shop_name].user_num
                             }
-                            this.convertOrderTimeData[day][item.shop_name].push(item)
+
                         });
                     }
                 }).catch((error) => {
                     console.log(error)
                 })
-
             }
 
         }

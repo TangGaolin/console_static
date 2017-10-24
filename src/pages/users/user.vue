@@ -26,7 +26,7 @@
                 </span>
             </div>
             <br/>
-
+            <Tag color="blue">会员数量: {{userTotal}}</Tag>
             <Table stripe :columns="userColumns" :data="userData"></Table>
             <br/>
             <div style="float: right;">

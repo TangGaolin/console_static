@@ -20,3 +20,13 @@ export function getOrderTimeList (params) {
         data
     })
 }
+
+// 获取门店预约数据情况
+export function getOrderTimeView (params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/storeData/getOrderTimeView',
+        method: 'post',
+        data
+    })
+}

@@ -11,7 +11,8 @@
         <div class="content-main">
             <div class="sub_title">
                 <Input v-model="searchData.order_id" placeholder="订单号..."  style="width: 250px;float: left;padding-right: 10px;"   @on-enter=""></Input>
-                <Date-picker type="date" placeholder="选择日期" style="width: 200px;float: left" :options="options1" v-model = chooseDate></Date-picker>
+                <!--<Date-picker type="date" placeholder="选择日期" style="width: 200px;float: left" :options="options1" v-model = chooseDate></Date-picker>-->
+                <DatePicker type="daterange" :options="options2" format="yyyy/MM/dd"placeholder="选择日期" style="width: 200px" v-model = date_range></DatePicker>
                 &nbsp;&nbsp;
                 <Select v-model="searchData.shop_id" style="width:100px">
                     <Option v-for="shop in selectStoreData" :value="shop.shop_id" :key="shop.shop_id">
@@ -24,6 +25,8 @@
 
             <br/>
             <div v-if="orderList.data">
+                <Tag color="blue">单据数量: {{orderList.totalSize}}</Tag>
+                <Tag color="red">消耗总和: {{orderList.totalMoney}}</Tag>
                 <Table stripe :columns="columns_xiaohao" :data="orderList.data"></Table>
                 <br/>
                 <div style="float: right;">
@@ -46,12 +49,14 @@
         components: { OrderInfoTableRow },
         data() {
             return {
-                chooseDate: new Date(),
+
+                date_range: [],
                 selectStoreData:[],
                 storeList:[],
                 searchData: {
                     order_id: "",
                     shop_id: 0,
+                    date_range:[],
                     select_date: "",
                     cur_page: 1,
                     limit: 15
@@ -59,10 +64,36 @@
 
                 shopCovertData:{},
                 orderList:[],
-                options1: {
-                    disabledDate (date) {
-                        return date && date.valueOf() > Date.now();
-                    }
+                options2: {
+                    shortcuts: [
+                        {
+                            text: '最近一周',
+                            value () {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                                return [start, end];
+                            }
+                        },
+                        {
+                            text: '最近一个月',
+                            value () {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                                return [start, end];
+                            }
+                        },
+                        {
+                            text: '最近三个月',
+                            value () {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                                return [start, end];
+                            }
+                        }
+                    ]
                 },
                 columns_xiaohao:[
                     {
@@ -129,6 +160,12 @@
             ])
         },
         created() {
+            let yestoday = new Date()
+            yestoday.setTime(yestoday.getTime() - 1000 * 60 * 60 * 24)
+            this.date_range = [
+                formatDate(yestoday, 'yyyy-MM-dd'),
+                formatDate(new Date(), 'yyyy-MM-dd')
+            ]
             this.getStoreData()
         },
         methods: {
@@ -154,7 +191,10 @@
                 })
             },
             getOrderList() {
-                this.searchData.select_date = formatDate(this.chooseDate, "yyyy-MM-dd")
+                this.searchData.date_range = [
+                    formatDate(new Date(this.date_range[0]),'yyyy-MM-dd'),
+                    formatDate(new Date(this.date_range[1]),'yyyy-MM-dd'),
+                ]
                 getUseOrderList(this.searchData).then((response) => {
                     if(0 !== response.statusCode) {
                         this.$Message.error(response.msg)
