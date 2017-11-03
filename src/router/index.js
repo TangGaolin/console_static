@@ -25,7 +25,8 @@ const Authority = resolve       => require(['../pages/account/Authority'], resol
 const Account = resolve         => require(['../pages/account/Account'], resolve)
 
 const ItemData = resolve        => require(['../pages/analysis/ItemData'], resolve)
-const OrderTimeData = resolve        => require(['../pages/analysis/OrderTimeData'], resolve)
+const OrderTimeData = resolve   => require(['../pages/analysis/OrderTimeData'], resolve)
+const ShopAllMoney = resolve   => require(['../pages/analysis/ShopAllMoney'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -171,7 +172,7 @@ const router =  new Router({
         {
             path: "/analysis",
             component: Layout,
-            name: '数据统计',
+            name: "数据统计",
             icon: 'ios-pie',
             show: true,
             node_id: 30,
@@ -181,6 +182,13 @@ const router =  new Router({
                     path: "storeData",
                     component: ShopData,
                     node_id: 31,
+                    show: true
+                },
+                {
+                    name: "门店总览",
+                    path: "shopAllMoney",
+                    component: ShopAllMoney,
+                    node_id: 35,
                     show: true
                 },
                 {

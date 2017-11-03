@@ -64,7 +64,7 @@ export default {
     }
 
     .content-main {
-      padding: 40px 40px;
+      padding: 35px 35px;
     }
 
 </style>

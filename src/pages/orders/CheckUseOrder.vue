@@ -102,12 +102,11 @@
                         render: (h, params) => {
                             return h(OrderInfoTableRow, {
                                 props: {
-                                    rows: params.row.items_info
+                                    rows: params.row
                                 }
                             })
                         }
                     },
-
                     {
                         title: '门店',
                         key: 'shop_id',
@@ -121,9 +120,21 @@
                         key: 'use_order_id'
                     },
                     {
-                        title: '会员',
+                        title: '会员姓名',
+                        key: 'user_name',
                         width: 85,
-                        key: 'user_name'
+                        render: (h, params) => {
+                            return h('div', [
+                                h('LinkButton', {
+                                    props: {
+                                        to: "../customer-center/customer-info?uid=" + params.row.uid + "&shop_id=" + params.row.shop_id,
+                                        name: params.row.user_name,
+                                        size: "small",
+                                        type: "text"
+                                    },
+                                }, params.row.emp_name)
+                            ])
+                        }
                     },
                     {
                         title: '金额(元)',
@@ -135,9 +146,15 @@
                         key: 'items_info',
                         render: (h, params) => {
                             let item_names = [];
-                            params.row.items_info.forEach((item) => {
-                                item_names.push(item.item_name)
-                            })
+                            if(0 === params.row.uid){
+                                params.row.items_info.use_items.forEach((item) => {
+                                    item_names.push(item.item_name)
+                                })
+                            }else{
+                                params.row.items_info.forEach((item) => {
+                                    item_names.push(item.item_name)
+                                })
+                            }
                             return item_names.join(',')
                         }
                     },
@@ -160,11 +177,10 @@
             ])
         },
         created() {
-            let yestoday = new Date()
-            yestoday.setTime(yestoday.getTime() - 1000 * 60 * 60 * 24)
+            let yestoday = formatDate(new Date(), 'yyyy-MM-dd')
             this.date_range = [
-                formatDate(yestoday, 'yyyy-MM-dd'),
-                formatDate(new Date(), 'yyyy-MM-dd')
+                yestoday,
+                yestoday
             ]
             this.getStoreData()
         },
@@ -193,7 +209,7 @@
             getOrderList() {
                 this.searchData.date_range = [
                     formatDate(new Date(this.date_range[0]),'yyyy-MM-dd'),
-                    formatDate(new Date(this.date_range[1]),'yyyy-MM-dd'),
+                    formatDate(new Date(this.date_range[1]),'yyyy-MM-dd') + ' 23:59:59',
                 ]
                 getUseOrderList(this.searchData).then((response) => {
                     if(0 !== response.statusCode) {

@@ -106,19 +106,31 @@
                     {
                         title: '门店',
                         key: 'shop_id',
+                        width: 85,
                         render: (h, params) => {
                             return  this.shopCovertData[params.row.shop_id]
                         }
                     },
                     {
                         title: '订单号',
-                        key: 'order_id'
+                        key: 'order_id',
                     },
                     {
                         title: '会员姓名',
                         key: 'user_name',
-                        width: 85
-
+                        width: 85,
+                        render: (h, params) => {
+                            return h('div', [
+                                h('LinkButton', {
+                                    props: {
+                                        to: "../customer-center/customer-info?uid=" + params.row.uid + "&shop_id=" + params.row.shop_id,
+                                        name: params.row.user_name,
+                                        size: "small",
+                                        type: "text"
+                                    },
+                                }, params.row.emp_name)
+                            ])
+                        }
                     },
                     {
                         title: '类 型',
@@ -160,12 +172,8 @@
             ])
         },
         created() {
-            let yestoday = new Date()
-            yestoday.setTime(yestoday.getTime() - 1000 * 60 * 60 * 24)
-            this.date_range = [
-                formatDate(yestoday, 'yyyy-MM-dd'),
-                formatDate(new Date(), 'yyyy-MM-dd')
-            ]
+            let yestoday = formatDate(new Date(), 'yyyy-MM-dd')
+            this.date_range = [yestoday, yestoday]
             this.getStoreData()
         },
         methods: {
@@ -193,7 +201,7 @@
             getOrderList() {
                 this.searchData.date_range = [
                     formatDate(new Date(this.date_range[0]),'yyyy-MM-dd'),
-                    formatDate(new Date(this.date_range[1]),'yyyy-MM-dd'),
+                    formatDate(new Date(this.date_range[1]),'yyyy-MM-dd') + ' 23: 59:59',
                 ]
                 getOrderList(this.searchData).then((response) => {
                     if(0 !== response.statusCode) {

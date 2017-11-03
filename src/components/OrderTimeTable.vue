@@ -111,7 +111,7 @@
         text-align: left;
         display: block;
         color: #666;
-        height: 50px;
+        height: 60px;
         padding: 4px 8px;
         -webkit-transition: background .3s ease;
         transition: background .3s ease;

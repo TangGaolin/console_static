@@ -27,5 +27,11 @@ export function addStore(params) {
     });
 }
 
-
-
+export function getStoreAllMoney(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/storeData/getStoreAllMoney',
+        method: 'post',
+        data
+    });
+}

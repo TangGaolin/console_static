@@ -43,10 +43,8 @@
 
         <Modal v-model="showModel" width="720">
             <p slot="header" style="color:#f60;text-align:center">
-                <span> {{year + "年" + currentDay + "日" }} * {{currentShopName}} * 预约详情</span>
+                <span> {{year + "年" + month + "月" + currentDay + "日" }} * {{currentShopName}} * 预约详情</span>
             </p>
-
-
             <orderTimeTable
                     :orderTimeData = currentData
             ></orderTimeTable>
@@ -221,7 +219,7 @@
         text-align: left;
         display: block;
         color: #666;
-        height: 116px;
+        min-height: 116px;
         padding: 4px 8px;
         -webkit-transition: background .3s ease;
         transition: background .3s ease;
@@ -273,7 +271,6 @@
         left: auto;
         bottom: auto;
     }
-
     .events li {
         color: #999;
         overflow: hidden;
