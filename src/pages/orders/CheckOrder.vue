@@ -34,13 +34,58 @@
             </div>
             <p>&nbsp;</p>
 
+
+            <Modal v-model="showModel" width="720">
+                <p slot="header" style="color:#f60;text-align:center" class = "red" >
+                    <Icon type="edit"></Icon>
+                    <span>单据详情</span>
+                </p>
+
+                <div>
+                    <Row>
+                        <Col span="8">
+                        <div>
+                            <label>单据编号：</label>
+                            {{currentOrder.order_id}}
+                        </div>
+                        </Col>
+                        <Col span="6">
+                        <div>
+                            <label>是否使用余额：</label>
+                            {{currentOrder.pay_balance}}
+                        </div>
+                        </Col>
+                        <Col span="6">
+                        <div>
+                            <label>是否欠款：</label>
+                            {{currentOrder.debt}}
+                        </div>
+                        </Col>
+                    </Row>
+
+                    <br/>
+                    <h3>项目使用状态</h3>
+                    <Table stripe :columns="itemColumns" :data="currentOrderItems"></Table>
+                </div>
+
+                <p v-if="cancelFlag" style="font-size: 14px;color: red;text-align: center">该单据不支持撤销操作，请联系技术支持！</p>
+
+                <p slot="footer" style="text-align: center">
+                    <Button type="primary" :disabled="cancelFlag" :loading="submitLoading" @click="cancelOrderAction()">
+                        <span v-if="!submitLoading">确认撤销</span>
+                        <span v-else>Loading...</span>
+                    </Button>
+                </p>
+            </Modal>
+
         </div>
     </div>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
-    import { getOrderList } from '../../api/orders'
+    import { getOrderList,  } from '../../api/orders'
+    import { getItemListByOrderId, cancelOrderAction  } from '../../api/user'
     import { getStoreList } from '../../api/shop'
     import { formatDate } from '../../utils/utils'
     import OrderInfoTableRow from '../../components/OrderInfoTableRow.vue'
@@ -161,8 +206,64 @@
                     {
                         title: '结算时间',
                         key: 'add_time'
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render: (h, params) => {
+                            if(1 !== params.row.order_type || 0 === params.row.uid) {
+                                return "暂不支持操作"
+                            }
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.chooseOrder(params.row)
+                                        }
+                                    }
+                                }, '撤销单据')
+                            ]);
+                        }
                     }
                 ],
+
+                showModel: false,
+
+                currentOrder:{},
+                currentOrderItems:[],
+
+                cancelFlag: false,
+                itemColumns: [
+                    {
+                        title: '项目名称',
+                        key: 'item_name'
+                    },
+                    {
+                        title: '总次数',
+                        key: 'times'
+                    },
+                    {
+                        title: '剩余次数',
+                        key: 'used_times',
+                        render: (h, params) => {
+                            return params.row.times - params.row.used_times
+                        }
+                    },
+                    {
+                        title: '剩余金额',
+                        key: 'now_money'
+                    }
+                ],
+                submitLoading: false,
 
             }
         },
@@ -201,7 +302,7 @@
             getOrderList() {
                 this.searchData.date_range = [
                     formatDate(new Date(this.date_range[0]),'yyyy-MM-dd'),
-                    formatDate(new Date(this.date_range[1]),'yyyy-MM-dd') + ' 23: 59:59',
+                    formatDate(new Date(this.date_range[1]),'yyyy-MM-dd') + ' 23:59:59',
                 ]
                 getOrderList(this.searchData).then((response) => {
                     if(0 !== response.statusCode) {
@@ -216,6 +317,44 @@
             changePage(page) {
                 this.searchData.cur_page = page
                 this.getOrderList()
+            },
+
+            chooseOrder(orderInfo) {
+                this.showModel = true
+                this.cancelFlag = false
+                this.currentOrder = orderInfo
+                if(this.currentOrder.pay_balance > 0 || this.currentOrder.debt > 0) {
+                    this.cancelFlag = true
+                }
+                getItemListByOrderId({order_id:orderInfo.order_id}).then((response) => {
+                    if(0 !== response.statusCode) {
+                        this.$Message.error(response.msg)
+                    }else{
+                        this.currentOrderItems = response.data
+                        this.currentOrderItems.forEach((item) => {
+                            if(item.used_times > 0){
+                                this.cancelFlag = true  //若是使用过，暂时不支持撤销
+                            }
+                        })
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
+            },
+
+            cancelOrderAction() {
+                cancelOrderAction({
+                    order_id: this.currentOrder.order_id
+                }).then((response) => {
+                    if(0 !== response.statusCode) {
+                        this.$Message.error(response.msg)
+                    }else{
+                        this.showModel = false
+                        this.$Message.success("撤销成功!")
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                })
             }
         }
     }

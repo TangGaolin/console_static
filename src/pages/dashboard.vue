@@ -7,15 +7,9 @@
                 </label>
             </p>
             <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <label style="font-size: 38px;font-weight: bolder;">德美店务后台系统</label>
-                <Tag size="small">v0.9 Beta</Tag>
             </p>
             <br/>
-            <p style="font-size: 18px">
-                <label>联系电话：</label>13247719350
-                <label>QQ：</label>931257903
-            </p>
         </div>
 
     </div>

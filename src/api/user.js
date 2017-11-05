@@ -71,3 +71,23 @@ export function addUser(params) {
         data
     });
 }
+
+//获取业绩列表
+export function getItemListByOrderId(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/users/getItemListByOrderId',
+        method: 'post',
+        data
+    })
+}
+
+//获取业绩列表
+export function cancelOrderAction(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/users/cancelOrderAction',
+        method: 'post',
+        data
+    })
+}
