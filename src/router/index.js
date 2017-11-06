@@ -27,6 +27,7 @@ const Account = resolve         => require(['../pages/account/Account'], resolve
 const ItemData = resolve        => require(['../pages/analysis/ItemData'], resolve)
 const OrderTimeData = resolve   => require(['../pages/analysis/OrderTimeData'], resolve)
 const ShopAllMoney = resolve   => require(['../pages/analysis/ShopAllMoney'], resolve)
+const ShopEmpData = resolve   => require(['../pages/analysis/ShopEmpData'], resolve)
 
 Vue.use(Router)
 const router =  new Router({
@@ -189,6 +190,13 @@ const router =  new Router({
                     path: "shopAllMoney",
                     component: ShopAllMoney,
                     node_id: 35,
+                    show: true
+                },
+                {
+                    name: "员工数据",
+                    path: "shopEmpData",
+                    component: ShopEmpData,
+                    node_id: 37,
                     show: true
                 },
                 {

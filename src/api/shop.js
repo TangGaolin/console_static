@@ -35,3 +35,12 @@ export function getStoreAllMoney(params) {
         data
     });
 }
+
+export function getShopEmpData(params) {
+    const data = params
+    return fetch({
+        url:  process.env.API_ROOT + '/storeData/getShopEmpData',
+        method: 'post',
+        data
+    });
+}

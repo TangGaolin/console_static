@@ -10,7 +10,7 @@
 
         <div class="content-main">
             <div class="sub_title">
-                <Input v-model="searchData.order_id" placeholder="订单号..."  style="width: 250px;float: left;padding-right: 10px;"   @on-enter=""></Input>
+                <Input v-model="searchData.order_id" placeholder="订单号..."  style="width: 250px;float: left;padding-right: 10px;"   @on-enter="getOrderList"></Input>
                 <DatePicker type="daterange" :options="options2" format="yyyy/MM/dd"placeholder="选择日期" style="width: 200px" v-model = date_range></DatePicker>
                 &nbsp;&nbsp;
                 <Select v-model="searchData.shop_id" style="width:100px">

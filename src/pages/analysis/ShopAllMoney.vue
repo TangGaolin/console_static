@@ -133,7 +133,6 @@ export default {
                 return
             }
             if(this.selectStoreData[this.searchData.shop_id]) {
-                console.log(this.selectStoreData[this.searchData.shop_id])
                 this.currentStoreData = this.selectStoreData[this.searchData.shop_id]
                 this.setChartData()
                 return
