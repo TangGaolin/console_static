@@ -23,10 +23,11 @@
                         </span>
                     </div>
                     <br/>
+                    <Tag color="blue">产品数量: {{goodTotal}}</Tag>
                     <Table stripe :columns="goodColumns" :data="goodList"></Table>
                     <br/>
                     <div style="float: right;">
-                        <Page :total= goodTotal :current= "1" @on-change="changePage"></Page>
+                        <Page :total= goodTotal :page-size = searchData.limit :current= searchData.cur_page @on-change="changePage"></Page>
                     </div>
                 </Tab-pane>
 

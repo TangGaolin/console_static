@@ -154,16 +154,17 @@
                         this.shopsData = response.data
                         this.countShopsData = []
                         for (var shop_id in this.shopsData) {
-                            var shopDta = {
+                            var shopData = {
                                 shop: this.shopCovertData[shop_id],
                                 yeji: 0,
                                 xiaohao: 0
                             }
                             this.shopsData[shop_id].forEach((item) => {
-                                shopDta.yeji += Number(item.yeji)
-                                shopDta.xiaohao += Number(item.xiaohao)
+                                shopData.yeji    += Number(item.yeji)
+                                shopData.xiaohao += Number(item.xiaohao)
                             })
-                            this.countShopsData.push(shopDta)
+                            shopData.xiaohao = shopData.xiaohao.toFixed(2)
+                            this.countShopsData.push(shopData)
                         }
                         this.changeCurrentShop()
                     }

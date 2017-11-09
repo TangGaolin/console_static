@@ -30,10 +30,11 @@
                         </span>
                     </div>
                     <br/>
+                    <Tag color="blue">项目数量: {{itemTotal}}</Tag>
                     <Table stripe :columns="itemColumns" :data="itemList"></Table>
                     <br/>
                     <div style="float: right;">
-                        <Page :total= itemTotal :current= "1" @on-change="changePage"></Page>
+                        <Page :total= itemTotal :page-size = searchData.limit :current = searchData.cur_page @on-change="changePage"></Page>
                     </div>
                 </Tab-pane>
 
@@ -281,7 +282,7 @@ export default {
         },
 
         changePage(page){
-            this.searchData.page = page
+            this.searchData.cur_page = page
             this.getItemList()
         },
 

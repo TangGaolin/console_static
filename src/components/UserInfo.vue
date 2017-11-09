@@ -29,31 +29,37 @@
         <br>
         <Row :gutter="16">
             <Col span="6">
-                <div>
-                    <label>余额：</label>
-                    {{ currentUserData.balance }} 元
-                </div>
+            <div>
+                <label>余额：</label>
+                {{ currentUserData.balance }}元
+            </div>
             </Col>
             <Col span="6">
-                <div>
-                    <label>产品余额：</label>
-                    {{ currentUserData.good_money }} 元
-                </div>
+            <div>
+                <label>赠送余额：</label>
+                {{ currentUserData.give_balance }}元
+            </div>
             </Col>
             <Col span="6">
-                <div>
-                    <label>欠款：</label>
-                    {{ currentUserData.debt }} 元
-                </div>
+            <div>
+                <label>产品余额：</label>
+                {{ currentUserData.good_money }} 元
+            </div>
             </Col>
             <Col span="6">
-                <div>
-                    <label>积分：</label>
-                    {{ currentUserData.point }}
-                </div>
+            <div>
+                <label>欠款：</label>
+                {{ currentUserData.debt }} 元
+            </div>
             </Col>
+            <!--<Col span="6">-->
+            <!--<div>-->
+            <!--<label>积分：</label>-->
+            <!--{{ currentUserData.point }}-->
+            <!--</div>-->
+            <!--</Col>-->
         </Row>
-        <br>
+        <br/>
         <Row :gutter="16">
             <Col span="10">
             <label>上次离店时间：</label>
@@ -66,7 +72,7 @@
             </div>
             </Col>
         </Row>
-        <br>
+        <br/>
         <div>
             <label>备注：</label>
             {{ currentUserData.remark }}
